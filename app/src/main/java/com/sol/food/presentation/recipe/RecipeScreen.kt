@@ -1,6 +1,7 @@
 package com.sol.food.presentation.recipe
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -200,9 +201,12 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                         LazyColumn(modifier = Modifier.heightIn(max = 600.dp)) {
                             items(recipeRandom!!.nutrition.nutrients.size) { index ->
                                 val nutrient = recipeRandom!!.nutrition.nutrients[index]
-                                NutrientItem(nutrient)
+                                val color = if (index < 10) Color.Red else Color.Blue
+                                NutrientItem(nutrient, color)
                             }
                         }
+//                        Text(text = "Limit These", color=Color.Red)
+//                        Text(text = "Get Enough Of These", color=Color.Blue)
                     } else {
                         Text(text = "No nutrients info")
                     }
@@ -300,33 +304,41 @@ fun InstructionItem(instruction: Step) {
 }
 
 @Composable
-fun NutrientItem(nutrient: NutrientX) {
-    Row (verticalAlignment = Alignment.CenterVertically){
-        Text(text = nutrient.name, style = MaterialTheme.typography.bodyMedium)
-        Spacer(modifier = Modifier.width(4.dp))
+fun NutrientItem(nutrient: NutrientX, color: Color) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Text(
-            text = "${nutrient.amount} ${nutrient.unit}",
-            style = MaterialTheme.typography.bodyMedium
+            text = nutrient.name, style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.weight(1.4f)
         )
-        Spacer(modifier = Modifier.width(4.dp))
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(10.dp)
-//                .background(Color.Blue, shape = RoundedCornerShape(5.dp))
-//        ) {
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth(fraction = nutrient.percentOfDailyNeeds.roundToInt() / 100f)
-//                    .height(10.dp)
-//                    .background(Color.Red, shape = RoundedCornerShape(5.dp))
-//            )
-//        }
-//        Spacer(modifier = Modifier.width(4.dp))
+        Text(
+            text = "${nutrient.amount}${nutrient.unit}",
+            maxLines = 1,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.weight(1f)
+        )
+        Box(
+            modifier = Modifier
+                .width(140.dp)
+                .height(10.dp)
+                .background(Color.Cyan, shape = RoundedCornerShape(5.dp))
+                .weight(1.8f)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(fraction = nutrient.percentOfDailyNeeds.roundToInt() / 100f)
+                    .height(10.dp)
+                    .background(color, shape = RoundedCornerShape(5.dp))
+            )
+        }
         Text(
             text = "${nutrient.percentOfDailyNeeds}%",
+            maxLines = 1,
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Red,
+            color = color,
+            modifier = Modifier.weight(.8f)
         )
+
     }
 }
