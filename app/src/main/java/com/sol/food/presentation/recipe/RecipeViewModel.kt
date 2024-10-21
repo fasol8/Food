@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sol.food.data.repository.RecipeRepository
+import com.sol.food.domain.model.recipe.NutrientResponse
 import com.sol.food.domain.model.recipe.RecipeDetail
 import com.sol.food.domain.model.recipe.SimilarResponseItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,8 @@ class RecipeViewModel @Inject constructor(private val repository: RecipeReposito
     private val _similarRecipe = MutableLiveData<List<SimilarResponseItem>>()
     val similarRecipe: LiveData<List<SimilarResponseItem>> = _similarRecipe
 
-
+    private val _nutrientRecipe = MutableLiveData<NutrientResponse>()
+    val nutrientRecipe: LiveData<NutrientResponse> = _nutrientRecipe
 
     init {
         getRandomRecipe()
@@ -29,6 +31,7 @@ class RecipeViewModel @Inject constructor(private val repository: RecipeReposito
 
     fun loadData(idRecipe: Int) {
         getSimilarRecipe(idRecipe)
+        getNutrientRecipe(idRecipe)
     }
 
     private fun getRandomRecipe() {
@@ -47,6 +50,17 @@ class RecipeViewModel @Inject constructor(private val repository: RecipeReposito
             try {
                 val response = repository.getSimilarRecipe(idRecipe)
                 _similarRecipe.value = response
+            } catch (e: Exception) {
+                Log.i("Error", e.message.toString())
+            }
+        }
+    }
+
+    private fun getNutrientRecipe(idRecipe: Int) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getNutrientRecipe(idRecipe)
+                _nutrientRecipe.value = response
             } catch (e: Exception) {
                 Log.i("Error", e.message.toString())
             }

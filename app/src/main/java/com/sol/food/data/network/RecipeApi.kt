@@ -1,6 +1,7 @@
 package com.sol.food.data.network
 
 import com.sol.food.BuildConfig
+import com.sol.food.domain.model.recipe.NutrientResponse
 import com.sol.food.domain.model.recipe.RecipeDetail
 import com.sol.food.domain.model.recipe.RecipeRandomResponse
 import com.sol.food.domain.model.recipe.SimilarResponse
@@ -21,4 +22,11 @@ interface RecipeApi {
         @Path("id") idRecipe: Int,
         @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
     ): SimilarResponse
+
+
+    @GET("recipes/{id}/nutritionWidget.json")
+    suspend fun getNutrientRecipe(
+        @Path("id") idRecipe: Int,
+        @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
+    ): NutrientResponse
 }

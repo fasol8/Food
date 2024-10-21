@@ -21,10 +21,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -32,6 +29,7 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -54,7 +52,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.sol.food.R
 import com.sol.food.domain.model.recipe.ExtendedIngredient
-import com.sol.food.domain.model.recipe.NutrientX
+import com.sol.food.domain.model.recipe.NutrientGorB
 import com.sol.food.domain.model.recipe.SimilarResponseItem
 import com.sol.food.domain.model.recipe.Step
 import com.sol.food.utils.colorCardType
@@ -64,6 +62,7 @@ import kotlin.math.roundToInt
 fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
     val recipeRandom by recipeViewModel.randomRecipe.observeAsState()
     val recipeSimilar by recipeViewModel.similarRecipe.observeAsState(emptyList())
+    val recipeNutrient by recipeViewModel.nutrientRecipe.observeAsState()
 
     LaunchedEffect(recipeRandom) {
         if (recipeRandom != null)
@@ -76,7 +75,7 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
             .verticalScroll(rememberScrollState())
             .padding(4.dp, vertical = 60.dp)
     ) {
-        Box() {
+        Box {
             AsyncImage(
                 model = recipeRandom?.image,
                 contentDescription = recipeRandom?.title,
@@ -118,7 +117,7 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                                 style = MaterialTheme.typography.titleLarge
                             )
                             Text(
-                                text = recipeRandom?.sourceName ?: "Unknown",
+                                text = "By ${recipeRandom?.sourceName ?: ""}",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = Color.Blue,
                                 modifier = Modifier.clickable { /*TODO: intent url*/ }
@@ -209,16 +208,55 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                     }
                 }
                 ExpandableCard(title = "Nutritional Information") {
-                    if (recipeRandom?.nutrition?.nutrients != null) {
-                        LazyColumn(modifier = Modifier.heightIn(max = 600.dp)) {
-                            items(recipeRandom!!.nutrition.nutrients.size) { index ->
-                                val nutrient = recipeRandom!!.nutrition.nutrients[index]
-                                val color = if (index < 10) Color.Red else Color.Blue
-                                NutrientItem(nutrient, color)
+                    if (recipeNutrient != null) {
+                        Row {
+                            Text(
+                                text = "${recipeNutrient!!.calories} Calories",
+//                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .border(1.dp, Color.White)
+                                    .weight(1f)
+                            )
+                            Text(
+                                text = "${recipeNutrient!!.protein} Protein",
+//                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .border(1.dp, Color.White)
+                                    .weight(1f)
+                            )
+                            Text(
+                                text = "${recipeNutrient!!.fat} Fat",
+//                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .border(1.dp, Color.White)
+                                    .weight(1f)
+                            )
+                            Text(
+                                text = "${recipeNutrient!!.carbs} Carbs",
+//                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .border(1.dp, Color.White)
+                                    .weight(1f)
+                            )
+                        }
+                        Text(text = "Limit These", color = Color.Red)
+                        LazyColumn {
+                            items(recipeNutrient!!.bad.size) { index ->
+                                val nutrient = recipeNutrient!!.bad[index]
+                                NutrientItem(nutrient = nutrient, color = Color.Red)
                             }
                         }
-//                        Text(text = "Limit These", color=Color.Red)
-//                        Text(text = "Get Enough Of These", color=Color.Blue)
+                        Text(text = "Get Enough Of These", color = Color.Blue)
+                        LazyColumn {
+                            items(recipeNutrient!!.good.size) { index ->
+                                val nutrient = recipeNutrient!!.good[index]
+                                NutrientItem(nutrient = nutrient, color = Color.Blue)
+                            }
+                        }
                     } else {
                         Text(text = "No nutrients info")
                     }
@@ -302,7 +340,7 @@ fun IngredientItem(ingredient: ExtendedIngredient) {
                 modifier = Modifier.weight(1f)
             )
         }
-        Divider(Modifier.fillMaxWidth(), color = Color.White, thickness = 2.dp)
+        HorizontalDivider(Modifier.fillMaxWidth(), thickness = 2.dp, color = Color.White)
     }
 }
 
@@ -322,21 +360,21 @@ fun InstructionItem(instruction: Step) {
                 text = instruction.step, style = MaterialTheme.typography.bodyMedium,
             )
         }
-        Divider(Modifier.fillMaxWidth(), color = Color.White, thickness = 2.dp)
+        HorizontalDivider(Modifier.fillMaxWidth(), thickness = 2.dp, color = Color.White)
     }
 }
 
 @Composable
-fun NutrientItem(nutrient: NutrientX, color: Color) {
+fun NutrientItem(nutrient: NutrientGorB, color: Color) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = nutrient.name, style = MaterialTheme.typography.bodyMedium,
+            text = nutrient.title, style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1.4f)
         )
         Text(
-            text = "${nutrient.amount}${nutrient.unit}",
+            text = nutrient.amount,
             maxLines = 1,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1f)
