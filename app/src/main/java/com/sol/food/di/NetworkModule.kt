@@ -1,5 +1,6 @@
 package com.sol.food.di
 
+import com.sol.food.data.network.MealPlanApi
 import com.sol.food.data.network.RecipeApi
 import dagger.Module
 import dagger.Provides
@@ -26,5 +27,11 @@ object NetworkModule {
     @Singleton
     fun provideRecipeApi(retrofit: Retrofit): RecipeApi {
         return retrofit.create(RecipeApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMealPlanApi(retrofit: Retrofit): MealPlanApi {
+        return retrofit.create(MealPlanApi::class.java)
     }
 }
