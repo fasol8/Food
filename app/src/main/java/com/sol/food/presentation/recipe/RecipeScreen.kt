@@ -1,9 +1,9 @@
 package com.sol.food.presentation.recipe
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,8 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
@@ -38,11 +36,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -50,12 +47,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.sol.food.R
 import com.sol.food.domain.model.recipe.ExtendedIngredient
 import com.sol.food.domain.model.recipe.NutrientGorB
 import com.sol.food.domain.model.recipe.SimilarResponseItem
 import com.sol.food.domain.model.recipe.Step
-import com.sol.food.utils.colorCardType
+import com.sol.food.utils.ExpandableCard
 import kotlin.math.roundToInt
 
 @Composable
@@ -73,7 +71,7 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(4.dp, vertical = 60.dp)
+            .padding(4.dp, top = 40.dp, bottom = 90.dp)
     ) {
         Box {
             AsyncImage(
@@ -135,12 +133,12 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             imageVector = Icons.Default.ShoppingCart,
-                            contentDescription = "Rating",
+                            contentDescription = "Price Serving",
                             tint = Color.Gray,
                             modifier = Modifier.size(20.dp)
                         )
                         Text(
-                            text = recipeRandom?.pricePerServing.toString() ?: "0",
+                            text = "$${recipeRandom?.pricePerServing ?: "0"}",
                             color = Color.Gray
                         )
                         Spacer(modifier = Modifier.width(16.dp))
@@ -152,7 +150,7 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                             modifier = Modifier.size(20.dp)
                         )
                         Text(
-                            text = recipeRandom?.readyInMinutes.toString() ?: "??",
+                            text = "${recipeRandom?.readyInMinutes ?: "??"} min",
                             color = Color.Gray
                         )
                         Spacer(modifier = Modifier.width(16.dp))
@@ -163,7 +161,10 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                             tint = Color.Gray,
                             modifier = Modifier.size(20.dp)
                         )
-                        Text(text = recipeRandom?.servings.toString() ?: "??", color = Color.Gray)
+                        Text(
+                            text = "${recipeRandom?.servings ?: "??"} service",
+                            color = Color.Gray
+                        )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(text = " Description", style = MaterialTheme.typography.titleSmall)
@@ -209,52 +210,54 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                 }
                 ExpandableCard(title = "Nutritional Information") {
                     if (recipeNutrient != null) {
-                        Row {
-                            Text(
-                                text = "${recipeNutrient!!.calories} Calories",
+                        Column {
+                            Row {
+                                Text(
+                                    text = "${recipeNutrient!!.calories} Calories",
 //                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier
-                                    .padding(4.dp)
-                                    .border(1.dp, Color.White)
-                                    .weight(1f)
-                            )
-                            Text(
-                                text = "${recipeNutrient!!.protein} Protein",
+                                    modifier = Modifier
+                                        .padding(4.dp)
+                                        .border(1.dp, Color.White)
+                                        .weight(1f)
+                                )
+                                Text(
+                                    text = "${recipeNutrient!!.protein} Protein",
 //                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier
-                                    .padding(4.dp)
-                                    .border(1.dp, Color.White)
-                                    .weight(1f)
-                            )
-                            Text(
-                                text = "${recipeNutrient!!.fat} Fat",
+                                    modifier = Modifier
+                                        .padding(4.dp)
+                                        .border(1.dp, Color.White)
+                                        .weight(1f)
+                                )
+                                Text(
+                                    text = "${recipeNutrient!!.fat} Fat",
 //                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier
-                                    .padding(4.dp)
-                                    .border(1.dp, Color.White)
-                                    .weight(1f)
-                            )
-                            Text(
-                                text = "${recipeNutrient!!.carbs} Carbs",
+                                    modifier = Modifier
+                                        .padding(4.dp)
+                                        .border(1.dp, Color.White)
+                                        .weight(1f)
+                                )
+                                Text(
+                                    text = "${recipeNutrient!!.carbs} Carbs",
 //                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier
-                                    .padding(4.dp)
-                                    .border(1.dp, Color.White)
-                                    .weight(1f)
-                            )
-                        }
-                        Text(text = "Limit These", color = Color.Red)
-                        LazyColumn {
-                            items(recipeNutrient!!.bad.size) { index ->
-                                val nutrient = recipeNutrient!!.bad[index]
-                                NutrientItem(nutrient = nutrient, color = Color.Red)
+                                    modifier = Modifier
+                                        .padding(4.dp)
+                                        .border(1.dp, Color.White)
+                                        .weight(1f)
+                                )
                             }
-                        }
-                        Text(text = "Get Enough Of These", color = Color.Blue)
-                        LazyColumn {
-                            items(recipeNutrient!!.good.size) { index ->
-                                val nutrient = recipeNutrient!!.good[index]
-                                NutrientItem(nutrient = nutrient, color = Color.Blue)
+                            Text(text = "Limit These", color = Color.Red)
+                            LazyColumn(modifier = Modifier.heightIn(max = 600.dp)) {
+                                items(recipeNutrient!!.bad.size) { index ->
+                                    val nutrient = recipeNutrient!!.bad[index]
+                                    NutrientItem(nutrient = nutrient, color = Color.Red)
+                                }
+                            }
+                            Text(text = "Get Enough Of These", color = Color.Blue)
+                            LazyColumn(modifier = Modifier.heightIn(max = 600.dp)) {
+                                items(recipeNutrient!!.good.size) { index ->
+                                    val nutrient = recipeNutrient!!.good[index]
+                                    NutrientItem(nutrient = nutrient, color = Color.Blue)
+                                }
                             }
                         }
                     } else {
@@ -269,53 +272,12 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                 LazyRow {
                     items(recipeSimilar.size) { index ->
                         val recipe = recipeSimilar[index]
-                        RecipeSimilarItem(recipe) {}
+                        RecipeSimilarItem(recipe) {/*TODO: intent to recipe Detail*/ }
                     }
                 }
             }
         }
 
-    }
-}
-
-@Composable
-fun ExpandableCard(title: String, content: @Composable () -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = colorCardType(title),
-            contentColor = Color.White,
-            disabledContainerColor = colorCardType(title),
-            disabledContentColor = Color.White
-        )
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f)
-                )
-                IconButton(onClick = { expanded = !expanded }) {
-                    Icon(
-                        imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                        contentDescription = ""
-                    )
-                }
-            }
-
-            AnimatedVisibility(visible = expanded) {
-                content()
-            }
-        }
     }
 }
 
@@ -383,7 +345,7 @@ fun NutrientItem(nutrient: NutrientGorB, color: Color) {
             modifier = Modifier
                 .width(140.dp)
                 .height(10.dp)
-                .background(Color.Cyan, shape = RoundedCornerShape(5.dp))
+                .background(Color.Transparent, shape = RoundedCornerShape(5.dp))
                 .weight(1.8f)
         ) {
             Box(
@@ -406,38 +368,62 @@ fun NutrientItem(nutrient: NutrientGorB, color: Color) {
 
 @Composable
 fun RecipeSimilarItem(recipe: SimilarResponseItem, onClick: () -> Unit) {
+    val imageBackground = ("https://img.spoonacular.com/recipes/${recipe.id}-556x370.jpg") ?: ""
+
     Card(
         modifier = Modifier
             .width(350.dp)
-            .height(100.dp)
+            .height(200.dp)
             .padding(8.dp),
         onClick = { onClick() }
     ) {
-        Column {
-            Text(text = recipe.title ?: "", style = MaterialTheme.typography.titleLarge)
-        }
-        Row {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_time),
-                contentDescription = "Ready in ...",
-                tint = Color.Gray,
-                modifier = Modifier.size(20.dp)
-            )
-            Text(
-                text = "${recipe.readyInMinutes} min" ?: "",
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Icon(
-                painter = painterResource(id = R.drawable.ic_service),
-                contentDescription = "Serving",
-                tint = Color.Gray,
-                modifier = Modifier.size(20.dp)
-            )
-            Text(
-                text = recipe.servings.toString() ?: "",
-                style = MaterialTheme.typography.bodyMedium
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            Color.Black.copy(alpha = 0.3f),
+                            Color.Transparent
+                        )
+                    )
+                )
+                .paint(
+                    painter = rememberAsyncImagePainter(model = imageBackground),
+                    contentScale = ContentScale.Crop,
+                    alpha = .3f
+                )
+        ) {
+            Column(
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = recipe.title ?: "", style = MaterialTheme.typography.titleLarge)
+                Row {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_time),
+                        contentDescription = "Ready in ...",
+                        tint = Color.Gray,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        text = "${recipe.readyInMinutes} min" ?: "",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_service),
+                        contentDescription = "Serving",
+                        tint = Color.Gray,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        text = recipe.servings.toString() ?: "",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
     }
 }
