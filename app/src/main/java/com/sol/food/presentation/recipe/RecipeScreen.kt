@@ -182,7 +182,7 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                         LazyColumn(modifier = Modifier.heightIn(max = 400.dp)) {
                             items(recipeRandom!!.extendedIngredients.size) { index ->
                                 val ingredient = recipeRandom!!.extendedIngredients[index]
-                                IngredientItem(ingredient)
+                                IngredientItemRecipe(ingredient)
                             }
                         }
                     } else {
@@ -282,10 +282,11 @@ fun RecipeScreen(recipeViewModel: RecipeViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun IngredientItem(ingredient: ExtendedIngredient) {
+fun IngredientItemRecipe(ingredient: ExtendedIngredient) {
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            val image = "https://img.spoonacular.com/ingredients_100x100/${ingredient.image}"
+            val image =
+                "https://img.spoonacular.com/ingredients_100x100/${ingredient.name}.jpg" ?: ""
             AsyncImage(
                 model = image,
                 contentDescription = ingredient.name,

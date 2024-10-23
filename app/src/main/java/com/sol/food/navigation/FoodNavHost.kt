@@ -10,6 +10,7 @@ import com.sol.food.presentation.home.HomeScreen
 import com.sol.food.presentation.ingredient.IngredientScreen
 import com.sol.food.presentation.mealPlan.MealPlanScreen
 import com.sol.food.presentation.menu.MenuScreen
+import com.sol.food.presentation.product.ProductScreen
 import com.sol.food.presentation.recipe.RecipeScreen
 
 @Composable
@@ -22,5 +23,6 @@ fun FoodNavHost(navController: NavHostController) {
 
         composable(FoodScreen.RecipeScreen.route) { RecipeScreen() }
         composable(FoodScreen.IngredientScreen.route) { IngredientScreen() }
+        composable(FoodScreen.ProductScreen.route) { ProductScreen() }
     }
 }
