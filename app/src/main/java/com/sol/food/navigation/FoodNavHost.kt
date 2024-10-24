@@ -3,8 +3,10 @@ package com.sol.food.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.sol.food.presentation.bookmark.BookMarkScreen
 import com.sol.food.presentation.home.HomeScreen
 import com.sol.food.presentation.ingredient.IngredientScreen
@@ -12,6 +14,8 @@ import com.sol.food.presentation.mealPlan.MealPlanScreen
 import com.sol.food.presentation.menu.MenuScreen
 import com.sol.food.presentation.product.ProductScreen
 import com.sol.food.presentation.recipe.RecipeScreen
+import com.sol.food.presentation.wine.WineMenu
+import com.sol.food.presentation.wine.WineScreen
 
 @Composable
 fun FoodNavHost(navController: NavHostController) {
@@ -24,5 +28,13 @@ fun FoodNavHost(navController: NavHostController) {
         composable(FoodScreen.RecipeScreen.route) { RecipeScreen() }
         composable(FoodScreen.IngredientScreen.route) { IngredientScreen() }
         composable(FoodScreen.ProductScreen.route) { ProductScreen() }
+        composable(FoodScreen.WineMenuScreen.route) { WineMenu(navController) }
+        composable(
+            FoodScreen.WineScreen.route + "/{wine}",
+            arguments = listOf(navArgument("wine") { type = NavType.StringType })
+        ) { navBackStackEntry ->
+            val wineString = navBackStackEntry.arguments?.getString("wine") ?: return@composable
+            WineScreen(wineString)
+        }
     }
 }

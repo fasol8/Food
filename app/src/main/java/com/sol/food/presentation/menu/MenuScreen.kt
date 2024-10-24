@@ -24,5 +24,10 @@ fun MenuScreen(navController: NavController) {
             modifier = Modifier
                 .padding(64.dp)
                 .clickable { navController.navigate(FoodScreen.ProductScreen.route) })
+        Text(
+            text = "Wine screen",
+            modifier = Modifier
+                .padding(64.dp)
+                .clickable { navController.navigate(FoodScreen.WineMenuScreen.route) })
     }
 }

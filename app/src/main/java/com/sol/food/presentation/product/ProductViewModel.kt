@@ -27,7 +27,6 @@ class ProductViewModel @Inject constructor(private val repository: ProductReposi
             try {
                 val response = repository.getInformationProduct(idProduct)
                 _informationProduct.value = response
-                Log.i("info badges", _informationProduct.value!!.importantBadges.toString())
             } catch (e: Exception) {
                 Log.i("Error", e.message.toString())
             }
