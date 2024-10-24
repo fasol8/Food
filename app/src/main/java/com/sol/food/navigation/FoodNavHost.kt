@@ -14,6 +14,7 @@ import com.sol.food.presentation.mealPlan.MealPlanScreen
 import com.sol.food.presentation.menu.MenuScreen
 import com.sol.food.presentation.product.ProductScreen
 import com.sol.food.presentation.recipe.RecipeScreen
+import com.sol.food.presentation.recipe.RecipeSearch
 import com.sol.food.presentation.wine.WineMenu
 import com.sol.food.presentation.wine.WinePairScreen
 import com.sol.food.presentation.wine.WinePairSearch
@@ -28,6 +29,7 @@ fun FoodNavHost(navController: NavHostController) {
         composable(FoodScreen.MenuScreen.route) { MenuScreen(navController) }
 
         composable(FoodScreen.RecipeScreen.route) { RecipeScreen() }
+        composable(FoodScreen.RecipeSearch.route) { RecipeSearch(navController) }
         composable(FoodScreen.IngredientScreen.route) { IngredientScreen() }
         composable(FoodScreen.ProductScreen.route) { ProductScreen() }
         composable(FoodScreen.WineMenuScreen.route) { WineMenu(navController) }

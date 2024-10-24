@@ -4,6 +4,7 @@ import com.sol.food.BuildConfig
 import com.sol.food.domain.model.recipe.NutrientResponse
 import com.sol.food.domain.model.recipe.RecipeDetail
 import com.sol.food.domain.model.recipe.RecipeRandomResponse
+import com.sol.food.domain.model.recipe.RecipeSearchResponse
 import com.sol.food.domain.model.recipe.SimilarResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -29,4 +30,11 @@ interface RecipeApi {
         @Path("id") idRecipe: Int,
         @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
     ): NutrientResponse
+
+    @GET("recipes/complexSearch")
+    suspend fun getSearchRecipe(
+        @Query("query") query: String,
+        @Query("number") number: Int = 10,
+        @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
+    ): RecipeSearchResponse
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.sol.food.data.repository.RecipeRepository
 import com.sol.food.domain.model.recipe.NutrientResponse
 import com.sol.food.domain.model.recipe.RecipeDetail
+import com.sol.food.domain.model.recipe.ResultSearch
 import com.sol.food.domain.model.recipe.SimilarResponseItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -24,6 +25,9 @@ class RecipeViewModel @Inject constructor(private val repository: RecipeReposito
 
     private val _nutrientRecipe = MutableLiveData<NutrientResponse>()
     val nutrientRecipe: LiveData<NutrientResponse> = _nutrientRecipe
+
+    private val _searchRecipe = MutableLiveData<List<ResultSearch>>()
+    val searchRecipe: LiveData<List<ResultSearch>> = _searchRecipe
 
     init {
         getRandomRecipe()
@@ -61,6 +65,17 @@ class RecipeViewModel @Inject constructor(private val repository: RecipeReposito
             try {
                 val response = repository.getNutrientRecipe(idRecipe)
                 _nutrientRecipe.value = response
+            } catch (e: Exception) {
+                Log.i("Error", e.message.toString())
+            }
+        }
+    }
+
+    fun getSearchRecipe(query: String) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getSearchRecipe(query)
+                _searchRecipe.value = response.results
             } catch (e: Exception) {
                 Log.i("Error", e.message.toString())
             }
