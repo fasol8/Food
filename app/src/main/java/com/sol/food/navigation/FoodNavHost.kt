@@ -15,6 +15,8 @@ import com.sol.food.presentation.menu.MenuScreen
 import com.sol.food.presentation.product.ProductScreen
 import com.sol.food.presentation.recipe.RecipeScreen
 import com.sol.food.presentation.wine.WineMenu
+import com.sol.food.presentation.wine.WinePairScreen
+import com.sol.food.presentation.wine.WinePairSearch
 import com.sol.food.presentation.wine.WineScreen
 
 @Composable
@@ -35,6 +37,14 @@ fun FoodNavHost(navController: NavHostController) {
         ) { navBackStackEntry ->
             val wineString = navBackStackEntry.arguments?.getString("wine") ?: return@composable
             WineScreen(wineString)
+        }
+        composable(FoodScreen.WinePairSearch.route) { WinePairSearch(navController) }
+        composable(
+            FoodScreen.WinePairScreen.route + "/{food}",
+            arguments = listOf(navArgument("food") { type = NavType.StringType })
+        ) { navBackStackEntry ->
+            val foodS = navBackStackEntry.arguments?.getString("food") ?: return@composable
+            WinePairScreen(foodS)
         }
     }
 }

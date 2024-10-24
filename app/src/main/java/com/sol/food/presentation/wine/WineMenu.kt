@@ -25,9 +25,9 @@ fun WineMenu(navController: NavController) {
         modifier = Modifier.padding(top = 40.dp, bottom = 90.dp)
     ) {
         items(WineType.size) { index ->
-            val wine = WineType[index]
-            WineTypeItem(wine.displayName) {
-                navController.navigate(FoodScreen.WineScreen.route + "/${wine.name}")
+            val wineT = WineType[index]
+            WineTypeItem(wineT.displayName) {
+                navController.navigate(FoodScreen.WineScreen.route + "/${wineT.name}")
             }
         }
     }

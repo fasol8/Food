@@ -48,8 +48,8 @@ fun WineScreen(wine: String, wineViewModel: WineViewModel = hiltViewModel()) {
                 .padding(top = 40.dp, bottom = 90.dp)
         ) {
             items(wines!!.recommendedWines.size) { index ->
-                val wine = wines!!.recommendedWines[index]
-                WineItem(wine)
+                val wineR = wines!!.recommendedWines[index]
+                WineItem(wineR)
             }
         }
     } else {
