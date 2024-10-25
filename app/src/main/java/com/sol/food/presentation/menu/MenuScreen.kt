@@ -15,11 +15,18 @@ import com.sol.food.navigation.FoodScreen
 fun MenuScreen(navController: NavController) {
     Column {
         Text(text = "Menu screen", modifier = Modifier.padding(64.dp))
-        Text(
-            text = "Ingredient screen",
-            modifier = Modifier
-                .padding(64.dp)
-                .clickable { navController.navigate(FoodScreen.IngredientScreen.route) })
+        Row {
+            Text(
+                text = "Ingredient Search",
+                modifier = Modifier
+                    .padding(start = 64.dp, top = 8.dp, bottom = 8.dp)
+                    .clickable { navController.navigate(FoodScreen.IngredientSearch.route) })
+            Text(
+                text = "Ingredient screen",
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable { navController.navigate(FoodScreen.IngredientScreen.route) })
+        }
         Text(
             text = "Product screen",
             modifier = Modifier

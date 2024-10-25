@@ -1,6 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
-package com.sol.food.presentation.recipe
+package com.sol.food.presentation.ingredient
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,12 +8,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,12 +29,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.sol.food.domain.model.recipe.ResultSearch
+import com.sol.food.domain.model.ingredient.ResultSearch
+import com.sol.food.navigation.FoodScreen
 import com.sol.food.utils.SearchBar
 
 @Composable
-fun RecipeSearch(navController: NavController, viewModel: RecipeViewModel = hiltViewModel()) {
-    val recipes by viewModel.searchRecipe.observeAsState()
+fun IngredientSearch(
+    navController: NavController,
+    viewModel: IngredientViewModel = hiltViewModel()
+) {
+    val ingredients by viewModel.searchIngredient.observeAsState()
     var query by remember { mutableStateOf("") }
 
     Column(
@@ -46,21 +46,20 @@ fun RecipeSearch(navController: NavController, viewModel: RecipeViewModel = hilt
             .fillMaxSize()
             .padding(start = 16.dp, end = 16.dp, top = 40.dp, bottom = 40.dp)
     ) {
-        SearchBar(
-            query = query,
-            placeholder = "Search recipe...",
+        SearchBar(query = query,
+            placeholder = "Search ingredient ...",
             onQueryChange = { query = it },
             onSearch = {
-                viewModel.getSearchRecipe(query)
+                viewModel.getSearchIngredient(query)
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        if (recipes != null) {
+        if (ingredients != null) {
             LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-                items(recipes!!.size) { index ->
-                    val recipe = recipes!![index]
-                    RecipeSearchItem(recipe) {
-//                        navController.navigate()
+                items(ingredients!!.size) { index ->
+                    val ingredient = ingredients!![index]
+                    IngredientSearchItem(ingredient) {
+                        navController.navigate(FoodScreen.IngredientScreen.route + "/${ingredient.id}")
                     }
                 }
             }
@@ -69,7 +68,9 @@ fun RecipeSearch(navController: NavController, viewModel: RecipeViewModel = hilt
 }
 
 @Composable
-fun RecipeSearchItem(recipe: ResultSearch, onClick: () -> Unit) {
+fun IngredientSearchItem(ingredient: ResultSearch, onClick: () -> Unit) {
+    val image = "https://spoonacular.com/cdn/ingredients_250x250/" + ingredient?.image
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -89,7 +90,7 @@ fun RecipeSearchItem(recipe: ResultSearch, onClick: () -> Unit) {
                     )
                 )
                 .paint(
-                    painter = rememberAsyncImagePainter(recipe.image),
+                    painter = rememberAsyncImagePainter(image),
                     contentScale = ContentScale.Crop,
                     alpha = .3f
                 )
@@ -100,7 +101,7 @@ fun RecipeSearchItem(recipe: ResultSearch, onClick: () -> Unit) {
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Bottom
             ) {
-                Text(text = recipe.title ?: "", style = MaterialTheme.typography.titleLarge)
+                Text(text = ingredient.name ?: "", style = MaterialTheme.typography.titleLarge)
             }
         }
     }

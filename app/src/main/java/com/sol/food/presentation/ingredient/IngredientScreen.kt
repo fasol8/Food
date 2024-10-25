@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -41,7 +42,14 @@ import com.sol.food.utils.ExpandableCard
 import kotlin.math.roundToInt
 
 @Composable
-fun IngredientScreen(ingredientViewModel: IngredientViewModel = hiltViewModel()) {
+fun IngredientScreen(
+    idIngredient: Int,
+    ingredientViewModel: IngredientViewModel = hiltViewModel()
+) {
+    LaunchedEffect(idIngredient) {
+        ingredientViewModel.getInformationIngredient(idIngredient)
+    }
+
     val infoIngredient by ingredientViewModel.informationIngredient.observeAsState()
     val image = "https://spoonacular.com/cdn/ingredients_250x250/" + infoIngredient?.image
     val possibleUnits = infoIngredient?.possibleUnits

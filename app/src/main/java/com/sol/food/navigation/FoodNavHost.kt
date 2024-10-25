@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.sol.food.presentation.bookmark.BookMarkScreen
 import com.sol.food.presentation.home.HomeScreen
 import com.sol.food.presentation.ingredient.IngredientScreen
+import com.sol.food.presentation.ingredient.IngredientSearch
 import com.sol.food.presentation.mealPlan.MealPlanScreen
 import com.sol.food.presentation.menu.MenuScreen
 import com.sol.food.presentation.product.ProductScreen
@@ -28,9 +29,16 @@ fun FoodNavHost(navController: NavHostController) {
         composable(FoodScreen.BookmarkScreen.route) { BookMarkScreen() }
         composable(FoodScreen.MenuScreen.route) { MenuScreen(navController) }
 
-        composable(FoodScreen.RecipeScreen.route) { RecipeScreen() }
         composable(FoodScreen.RecipeSearch.route) { RecipeSearch(navController) }
-        composable(FoodScreen.IngredientScreen.route) { IngredientScreen() }
+        composable(FoodScreen.RecipeScreen.route) { RecipeScreen() }
+        composable(FoodScreen.IngredientSearch.route) { IngredientSearch(navController) }
+        composable(
+            FoodScreen.IngredientScreen.route + "/{idIngredient}",
+            arguments = listOf(navArgument("idIngredient") { type = NavType.IntType })
+        ) { navBackStackEntry ->
+            val id = navBackStackEntry.arguments?.getInt("idIngredient") ?: return@composable
+            IngredientScreen(id)
+        }
         composable(FoodScreen.ProductScreen.route) { ProductScreen() }
         composable(FoodScreen.WineMenuScreen.route) { WineMenu(navController) }
         composable(
