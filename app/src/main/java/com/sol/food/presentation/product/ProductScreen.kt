@@ -1,5 +1,6 @@
 package com.sol.food.presentation.product
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,12 +22,14 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -45,8 +48,12 @@ import com.sol.food.presentation.recipe.IngredientItemRecipe
 import com.sol.food.utils.ExpandableCard
 
 @Composable
-fun ProductScreen(productViewModel: ProductViewModel = hiltViewModel()) {
+fun ProductScreen(idProduct: Int, productViewModel: ProductViewModel = hiltViewModel()) {
     val infoProduct by productViewModel.informationProduct.observeAsState()
+
+    LaunchedEffect(idProduct) {
+        productViewModel.getInformationProduct(idProduct)
+    }
 
     if (infoProduct != null) {
         val image = "https://img.spoonacular.com/products/${infoProduct?.id}-312x231.jpg"
@@ -122,7 +129,9 @@ fun ProductScreen(productViewModel: ProductViewModel = hiltViewModel()) {
                         }
                         if (importantBadges != null && importantBadges.isNotEmpty()) {
                             Text(
-                                text = "Important Badges:${importantBadges.joinToString(separator = ", ").replace("_"," ")}",
+                                text = "Important Badges:${
+                                    importantBadges.joinToString(separator = ", ").replace("_", " ")
+                                }",
                                 maxLines = 2
                             )
                         } else {
@@ -153,7 +162,9 @@ fun ProductScreen(productViewModel: ProductViewModel = hiltViewModel()) {
             }
         }
     } else {
-        Text(text = "Product Screen", modifier = Modifier.padding(64.dp))
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
     }
 }
 

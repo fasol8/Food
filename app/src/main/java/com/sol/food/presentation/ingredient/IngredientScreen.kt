@@ -1,7 +1,6 @@
 package com.sol.food.presentation.ingredient
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,7 +37,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.sol.food.domain.model.ingredient.Nutrient
 import com.sol.food.domain.model.ingredient.Property
-import com.sol.food.presentation.recipe.NutrientItem
 import com.sol.food.utils.ExpandableCard
 import kotlin.math.roundToInt
 
@@ -133,7 +132,9 @@ fun IngredientScreen(
             }
         }
     } else {
-        Text(text = "Ingredient Screen", modifier = Modifier.padding(64.dp))
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
     }
 }
 

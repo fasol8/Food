@@ -14,6 +14,7 @@ import com.sol.food.presentation.ingredient.IngredientSearch
 import com.sol.food.presentation.mealPlan.MealPlanScreen
 import com.sol.food.presentation.menu.MenuScreen
 import com.sol.food.presentation.product.ProductScreen
+import com.sol.food.presentation.product.ProductSearch
 import com.sol.food.presentation.recipe.RecipeScreen
 import com.sol.food.presentation.recipe.RecipeSearch
 import com.sol.food.presentation.wine.WineMenu
@@ -29,8 +30,10 @@ fun FoodNavHost(navController: NavHostController) {
         composable(FoodScreen.BookmarkScreen.route) { BookMarkScreen() }
         composable(FoodScreen.MenuScreen.route) { MenuScreen(navController) }
 
+
         composable(FoodScreen.RecipeSearch.route) { RecipeSearch(navController) }
         composable(FoodScreen.RecipeScreen.route) { RecipeScreen() }
+
         composable(FoodScreen.IngredientSearch.route) { IngredientSearch(navController) }
         composable(
             FoodScreen.IngredientScreen.route + "/{idIngredient}",
@@ -39,10 +42,17 @@ fun FoodNavHost(navController: NavHostController) {
             val id = navBackStackEntry.arguments?.getInt("idIngredient") ?: return@composable
             IngredientScreen(id)
         }
-        composable(FoodScreen.ProductScreen.route) { ProductScreen() }
+
+        composable(FoodScreen.ProductSearch.route) { ProductSearch(navController) }
+        composable(FoodScreen.ProductScreen.route + "/{idProduct}",
+            arguments = listOf(navArgument("idProduct") { type = NavType.IntType })
+        ) { navBackStackEntry ->
+            val id = navBackStackEntry.arguments?.getInt("idProduct") ?: return@composable
+            ProductScreen(id)
+        }
+
         composable(FoodScreen.WineMenuScreen.route) { WineMenu(navController) }
-        composable(
-            FoodScreen.WineScreen.route + "/{wine}",
+        composable(FoodScreen.WineScreen.route + "/{wine}",
             arguments = listOf(navArgument("wine") { type = NavType.StringType })
         ) { navBackStackEntry ->
             val wineString = navBackStackEntry.arguments?.getString("wine") ?: return@composable
