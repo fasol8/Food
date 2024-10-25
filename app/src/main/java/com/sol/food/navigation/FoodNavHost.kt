@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.sol.food.domain.model.misc.MiscType
 import com.sol.food.presentation.bookmark.BookMarkScreen
 import com.sol.food.presentation.home.HomeScreen
 import com.sol.food.presentation.ingredient.IngredientScreen
@@ -77,6 +78,13 @@ fun FoodNavHost(navController: NavHostController) {
             WinePairScreen(foodS)
         }
 
-        composable(FoodScreen.MiscScreen.route) { MiscScreen() }
+        composable(
+            FoodScreen.MiscScreen.route + "/{miscType}",
+            arguments = listOf(navArgument("miscType") { type = NavType.StringType })
+        ) { navBackStackEntry ->
+            val typeString = navBackStackEntry.arguments?.getString("miscType") ?: return@composable
+            val type = MiscType.fromString(typeString) ?: return@composable
+            MiscScreen(type)
+        }
     }
 }

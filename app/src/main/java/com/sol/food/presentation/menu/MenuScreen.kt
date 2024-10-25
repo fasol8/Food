@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.sol.food.domain.model.misc.MiscType
 import com.sol.food.navigation.FoodScreen
 
 @Composable
@@ -54,12 +55,19 @@ fun MenuScreen(navController: NavController) {
         Text(
             text = "Recipe search screen",
             modifier = Modifier
-                .padding(64.dp)
+                .padding(start = 64.dp, top = 8.dp, bottom = 8.dp)
                 .clickable { navController.navigate(FoodScreen.RecipeSearch.route) })
-        Text(
-            text = "Random Joke",
-            modifier = Modifier
-                .padding(64.dp)
-                .clickable { navController.navigate(FoodScreen.MiscScreen.route) })
+        Row {
+            Text(
+                text = "Random Joke",
+                modifier = Modifier
+                    .padding(start = 64.dp, top = 8.dp, bottom = 8.dp)
+                    .clickable { navController.navigate(FoodScreen.MiscScreen.route + "/${MiscType.Joke.typeName}") })
+            Text(
+                text = "Random Trivia",
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable { navController.navigate(FoodScreen.MiscScreen.route + "/${MiscType.Trivia.typeName}") })
+        }
     }
 }

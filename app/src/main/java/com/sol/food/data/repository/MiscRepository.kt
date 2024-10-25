@@ -9,4 +9,8 @@ class MiscRepository @Inject constructor(private val api: MiscApi) {
     suspend fun getRandomJoke(): MiscResponse {
         return api.getRandomJoke()
     }
+
+    suspend fun getRandomTrivia(): MiscResponse {
+        return api.getRandomTrivia()
+    }
 }

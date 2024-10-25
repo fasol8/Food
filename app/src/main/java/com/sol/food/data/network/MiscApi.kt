@@ -11,4 +11,9 @@ interface MiscApi {
     suspend fun getRandomJoke(
         @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
     ): MiscResponse
+
+    @GET("food/trivia/random")
+    suspend fun getRandomTrivia(
+        @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
+    ): MiscResponse
 }
