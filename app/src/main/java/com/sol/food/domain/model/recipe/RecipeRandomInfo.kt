@@ -1,6 +1,6 @@
 package com.sol.food.domain.model.recipe
 
-data class RecipeDetail(
+data class RecipeRandomInfo(
     val aggregateLikes: Int,
     val analyzedInstructions: List<AnalyzedInstruction>,
     val cheap: Boolean,

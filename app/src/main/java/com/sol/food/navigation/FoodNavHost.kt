@@ -1,7 +1,6 @@
 package com.sol.food.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,6 +14,7 @@ import com.sol.food.presentation.mealPlan.MealPlanScreen
 import com.sol.food.presentation.menu.MenuScreen
 import com.sol.food.presentation.product.ProductScreen
 import com.sol.food.presentation.product.ProductSearch
+import com.sol.food.presentation.recipe.RecipeRandom
 import com.sol.food.presentation.recipe.RecipeScreen
 import com.sol.food.presentation.recipe.RecipeSearch
 import com.sol.food.presentation.wine.WineMenu
@@ -32,7 +32,14 @@ fun FoodNavHost(navController: NavHostController) {
 
 
         composable(FoodScreen.RecipeSearch.route) { RecipeSearch(navController) }
-        composable(FoodScreen.RecipeScreen.route) { RecipeScreen() }
+        composable(
+            FoodScreen.RecipeScreen.route + "/{idRecipe}",
+            arguments = listOf(navArgument("idRecipe") { type = NavType.IntType })
+        ) { navBackStackEntry ->
+            val id = navBackStackEntry.arguments?.getInt("idRecipe") ?: return@composable
+            RecipeScreen(id)
+        }
+        composable(FoodScreen.RecipeRandom.route) { RecipeRandom() }
 
         composable(FoodScreen.IngredientSearch.route) { IngredientSearch(navController) }
         composable(
@@ -44,7 +51,8 @@ fun FoodNavHost(navController: NavHostController) {
         }
 
         composable(FoodScreen.ProductSearch.route) { ProductSearch(navController) }
-        composable(FoodScreen.ProductScreen.route + "/{idProduct}",
+        composable(
+            FoodScreen.ProductScreen.route + "/{idProduct}",
             arguments = listOf(navArgument("idProduct") { type = NavType.IntType })
         ) { navBackStackEntry ->
             val id = navBackStackEntry.arguments?.getInt("idProduct") ?: return@composable
@@ -52,7 +60,8 @@ fun FoodNavHost(navController: NavHostController) {
         }
 
         composable(FoodScreen.WineMenuScreen.route) { WineMenu(navController) }
-        composable(FoodScreen.WineScreen.route + "/{wine}",
+        composable(
+            FoodScreen.WineScreen.route + "/{wine}",
             arguments = listOf(navArgument("wine") { type = NavType.StringType })
         ) { navBackStackEntry ->
             val wineString = navBackStackEntry.arguments?.getString("wine") ?: return@composable

@@ -18,6 +18,6 @@ fun HomeScreen(navController: NavController) {
             text = "Random",
             modifier = Modifier
                 .padding(start = 64.dp)
-                .clickable { navController.navigate(FoodScreen.RecipeScreen.route) })
+                .clickable { navController.navigate(FoodScreen.RecipeRandom.route) })
     }
 }

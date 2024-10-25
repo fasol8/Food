@@ -2,7 +2,7 @@ package com.sol.food.data.network
 
 import com.sol.food.BuildConfig
 import com.sol.food.domain.model.recipe.NutrientResponse
-import com.sol.food.domain.model.recipe.RecipeDetail
+import com.sol.food.domain.model.recipe.RecipeInformation
 import com.sol.food.domain.model.recipe.RecipeRandomResponse
 import com.sol.food.domain.model.recipe.RecipeSearchResponse
 import com.sol.food.domain.model.recipe.SimilarResponse
@@ -15,7 +15,6 @@ interface RecipeApi {
     @GET("recipes/random")
     suspend fun getRandomRecipe(
         @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
-        @Query("includeNutrition") nutrition: Boolean = true
     ): RecipeRandomResponse
 
     @GET("recipes/{id}/similar")
@@ -37,4 +36,10 @@ interface RecipeApi {
         @Query("number") number: Int = 10,
         @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
     ): RecipeSearchResponse
+
+    @GET("recipes/{id}/information")
+    suspend fun getInformationRecipe(
+        @Path("id") idRecipe: Int,
+        @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
+    ): RecipeInformation
 }

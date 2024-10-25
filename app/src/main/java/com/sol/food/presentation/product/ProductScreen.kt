@@ -1,6 +1,5 @@
 package com.sol.food.presentation.product
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,7 +43,6 @@ import coil.compose.AsyncImage
 import com.sol.food.R
 import com.sol.food.domain.model.product.Ingredient
 import com.sol.food.presentation.ingredient.NutrientItemIngredient
-import com.sol.food.presentation.recipe.IngredientItemRecipe
 import com.sol.food.utils.ExpandableCard
 
 @Composable

@@ -1,5 +1,5 @@
 package com.sol.food.domain.model.recipe
 
 data class RecipeRandomResponse(
-    val recipes: List<RecipeDetail>
+    val recipes: List<RecipeRandomInfo>
 )

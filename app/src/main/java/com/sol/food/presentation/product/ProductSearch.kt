@@ -44,7 +44,7 @@ fun ProductSearch(navController: NavController, viewModel: ProductViewModel = hi
             .padding(start = 16.dp, end = 16.dp, top = 40.dp, bottom = 40.dp)
     ) {
         SearchBar(query = query,
-            placeholder = "Search ingredient ...",
+            placeholder = "Search product ...",
             onQueryChange = { query = it },
             onSearch = {
                 viewModel.getSearchProduct(query)

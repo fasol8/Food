@@ -11,6 +11,7 @@ sealed class FoodScreen(val route: String, val label: String, val icon: Int = 0)
 
     data object RecipeSearch : FoodScreen("recipeSearch", "Recipe Search")
     data object RecipeScreen : FoodScreen("recipeScreen", "Recipe Screen")
+    data object RecipeRandom : FoodScreen("recipeRandom", "Recipe Random")
     data object IngredientSearch : FoodScreen("ingredientSearch", "Ingredient Search")
     data object IngredientScreen : FoodScreen("ingredientScreen", "Ingredient Screen")
     data object ProductSearch : FoodScreen("productSearch", "Product Search")

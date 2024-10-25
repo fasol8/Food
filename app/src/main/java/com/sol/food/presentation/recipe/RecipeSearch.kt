@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.sol.food.presentation.recipe
 
 import androidx.compose.foundation.background
@@ -10,12 +8,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.sol.food.domain.model.recipe.ResultSearch
+import com.sol.food.navigation.FoodScreen
 import com.sol.food.utils.SearchBar
 
 @Composable
@@ -60,7 +57,7 @@ fun RecipeSearch(navController: NavController, viewModel: RecipeViewModel = hilt
                 items(recipes!!.size) { index ->
                     val recipe = recipes!![index]
                     RecipeSearchItem(recipe) {
-//                        navController.navigate()
+                        navController.navigate(FoodScreen.RecipeScreen.route + "/${recipe.id}")
                     }
                 }
             }
