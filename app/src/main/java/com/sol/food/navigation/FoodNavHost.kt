@@ -12,6 +12,7 @@ import com.sol.food.presentation.ingredient.IngredientScreen
 import com.sol.food.presentation.ingredient.IngredientSearch
 import com.sol.food.presentation.mealPlan.MealPlanScreen
 import com.sol.food.presentation.menu.MenuScreen
+import com.sol.food.presentation.misc.MiscScreen
 import com.sol.food.presentation.product.ProductScreen
 import com.sol.food.presentation.product.ProductSearch
 import com.sol.food.presentation.recipe.RecipeRandom
@@ -75,5 +76,7 @@ fun FoodNavHost(navController: NavHostController) {
             val foodS = navBackStackEntry.arguments?.getString("food") ?: return@composable
             WinePairScreen(foodS)
         }
+
+        composable(FoodScreen.MiscScreen.route) { MiscScreen() }
     }
 }

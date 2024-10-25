@@ -56,5 +56,10 @@ fun MenuScreen(navController: NavController) {
             modifier = Modifier
                 .padding(64.dp)
                 .clickable { navController.navigate(FoodScreen.RecipeSearch.route) })
+        Text(
+            text = "Random Joke",
+            modifier = Modifier
+                .padding(64.dp)
+                .clickable { navController.navigate(FoodScreen.MiscScreen.route) })
     }
 }

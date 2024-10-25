@@ -2,6 +2,7 @@ package com.sol.food.di
 
 import com.sol.food.data.network.IngredientApi
 import com.sol.food.data.network.MealPlanApi
+import com.sol.food.data.network.MiscApi
 import com.sol.food.data.network.ProductApi
 import com.sol.food.data.network.RecipeApi
 import com.sol.food.data.network.WineApi
@@ -54,5 +55,11 @@ object NetworkModule {
     @Singleton
     fun provideWineApi(retrofit: Retrofit): WineApi {
         return retrofit.create(WineApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMiscApi(retrofit: Retrofit): MiscApi {
+        return retrofit.create(MiscApi::class.java)
     }
 }
