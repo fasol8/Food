@@ -69,5 +69,19 @@ fun MenuScreen(navController: NavController) {
                     .padding(8.dp)
                     .clickable { navController.navigate(FoodScreen.MiscScreen.route + "/${MiscType.Trivia.typeName}") })
         }
+        Row {
+            Text(
+                text = "Classify Image",
+                modifier = Modifier
+                    .padding(start = 64.dp, top = 8.dp, bottom = 8.dp)
+                    .clickable { navController.navigate(FoodScreen.MiscClassifyImage.route) })
+            Text(
+                text = "Analysis Image",
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable {
+//                        navController.navigate(FoodScreen.MiscScreen.route + "/${MiscType.Trivia.typeName}")
+                    })
+        }
     }
 }
