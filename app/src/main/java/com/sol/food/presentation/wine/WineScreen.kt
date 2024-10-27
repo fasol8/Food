@@ -27,10 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.sol.food.R
 import com.sol.food.domain.model.wine.RecommendedWine
 import kotlin.math.roundToInt
 
@@ -73,7 +75,9 @@ fun WineItem(wine: RecommendedWine) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .height(300.dp)
-                    .width(100.dp)
+                    .width(100.dp),
+                placeholder = painterResource(R.drawable.no_image),
+                error = painterResource(R.drawable.no_image)
             )
             Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
                 Text(

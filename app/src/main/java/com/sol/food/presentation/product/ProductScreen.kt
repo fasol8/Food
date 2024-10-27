@@ -69,7 +69,9 @@ fun ProductScreen(idProduct: Int, productViewModel: ProductViewModel = hiltViewM
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(370.dp)
+                        .height(370.dp),
+                    placeholder = painterResource(R.drawable.no_image),
+                    error = painterResource(R.drawable.no_image)
                 )
                 IconButton(
                     onClick = { /*TODO: save recipe*/ },

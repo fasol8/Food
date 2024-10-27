@@ -41,6 +41,7 @@ fun MiscClassifyImg(miscViewModel: MiscViewModel = hiltViewModel()) {
     val imgClassify by miscViewModel.classifyImage.observeAsState()
     var urlText by remember { mutableStateOf("") }
     var isValidUrl by remember { mutableStateOf(true) }
+    var imgUrl by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -72,8 +73,10 @@ fun MiscClassifyImg(miscViewModel: MiscViewModel = hiltViewModel()) {
 
             Button(
                 onClick = {
-                    if (isValidUrl)
+                    if (isValidUrl) {
                         miscViewModel.getClassifyImage(urlText)
+                        imgUrl = urlText
+                    }
                 },
                 enabled = isValidUrl && urlText.isNotEmpty(),
             ) {
@@ -96,7 +99,9 @@ fun MiscClassifyImg(miscViewModel: MiscViewModel = hiltViewModel()) {
         LazyRow {
             items(UrlFoodImages.entries.size) { index ->
                 val image = UrlFoodImages.entries[index].url
-                ImgClassifyItem(image, miscViewModel)
+                ImgClassifyItem(image, miscViewModel) {
+                    imgUrl = image
+                }
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
@@ -114,7 +119,7 @@ fun MiscClassifyImg(miscViewModel: MiscViewModel = hiltViewModel()) {
                         modifier = Modifier.padding(16.dp)
                     ) {
                         AsyncImage(
-                            model = urlText,
+                            model = imgUrl,
                             contentDescription = "image",
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -144,7 +149,7 @@ fun MiscClassifyImg(miscViewModel: MiscViewModel = hiltViewModel()) {
 
 
 @Composable
-fun ImgClassifyItem(image: String, miscViewModel: MiscViewModel) {
+fun ImgClassifyItem(image: String, miscViewModel: MiscViewModel, onClick: () -> Unit) {
     AsyncImage(
         model = image,
         contentDescription = "image",
@@ -155,5 +160,8 @@ fun ImgClassifyItem(image: String, miscViewModel: MiscViewModel) {
             .padding(8.dp)
             .aspectRatio(1f)
             .clip(RoundedCornerShape(8.dp))
-            .clickable { miscViewModel.getClassifyImage(image) })
+            .clickable {
+                miscViewModel.getClassifyImage(image)
+                onClick()
+            })
 }

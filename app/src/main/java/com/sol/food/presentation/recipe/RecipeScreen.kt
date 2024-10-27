@@ -84,7 +84,9 @@ fun RecipeScreen(idRecipe: Int, recipeViewModel: RecipeViewModel = hiltViewModel
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(370.dp)
+                    .height(370.dp),
+                placeholder = painterResource(R.drawable.no_image),
+                error = painterResource(R.drawable.no_image)
             )
             IconButton(
                 onClick = { /*TODO: save recipe*/ },
@@ -293,7 +295,9 @@ fun IngredientItemRecipe(ingredient: ExtendedIngredient) {
                 model = image,
                 contentDescription = ingredient.name,
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
+                placeholder = painterResource(R.drawable.no_image),
+                error = painterResource(R.drawable.no_image)
             )
             Text(
                 text = "${ingredient.amount} ${ingredient.unit}",

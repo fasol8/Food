@@ -74,7 +74,9 @@ fun RecipeRandom(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(370.dp)
+                    .height(370.dp),
+                placeholder = painterResource(R.drawable.no_image),
+                error = painterResource(R.drawable.no_image)
             )
             IconButton(
                 onClick = { /*TODO: save recipe*/ },

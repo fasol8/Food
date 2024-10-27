@@ -37,11 +37,13 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.sol.food.R
 import com.sol.food.domain.model.misc.NutritionInfo
 import com.sol.food.domain.model.misc.Recipe
 import com.sol.food.domain.model.misc.UrlFoodImages
@@ -52,6 +54,7 @@ fun MiscAnalysisImg(miscViewModel: MiscViewModel = hiltViewModel()) {
     val imgAnalysis by miscViewModel.analysisImage.observeAsState()
     var urlText by remember { mutableStateOf("") }
     var isValidUrl by remember { mutableStateOf(true) }
+    var imgUrl by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -60,7 +63,7 @@ fun MiscAnalysisImg(miscViewModel: MiscViewModel = hiltViewModel()) {
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Classify Image", style = MaterialTheme.typography.titleLarge)
+        Text(text = "Analysis Image", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(8.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -100,11 +103,13 @@ fun MiscAnalysisImg(miscViewModel: MiscViewModel = hiltViewModel()) {
         Spacer(modifier = Modifier.height(8.dp))
         if (imgAnalysis != null) {
             AsyncImage(
-                model = imgAnalysis,
+                model = imgUrl,
                 contentDescription = "image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(200.dp),
+                placeholder = painterResource(R.drawable.no_image),
+                error = painterResource(R.drawable.no_image)
             )
             Card {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -156,7 +161,9 @@ fun MiscAnalysisImg(miscViewModel: MiscViewModel = hiltViewModel()) {
             LazyRow(modifier = Modifier.heightIn(max = 600.dp)) {
                 items(UrlFoodImages.entries.size) { index ->
                     val image = UrlFoodImages.entries[index].url
-                    ImgAnalysisItem(image, miscViewModel)
+                    ImgAnalysisItem(image, miscViewModel) {
+                        imgUrl = image
+                    }
                 }
             }
         }
@@ -243,7 +250,7 @@ fun RecipeItem(recipeImgA: Recipe, onClick: () -> Unit) {
 }
 
 @Composable
-fun ImgAnalysisItem(image: String, miscViewModel: MiscViewModel) {
+fun ImgAnalysisItem(image: String, miscViewModel: MiscViewModel, onClick: () -> Unit) {
     AsyncImage(
         model = image,
         contentDescription = "image",
@@ -254,5 +261,11 @@ fun ImgAnalysisItem(image: String, miscViewModel: MiscViewModel) {
             .padding(8.dp)
             .aspectRatio(1f)
             .clip(RoundedCornerShape(8.dp))
-            .clickable { miscViewModel.getAnalysisImage(image) })
+            .clickable {
+                miscViewModel.getAnalysisImage(image)
+                onClick()
+            },
+        placeholder = painterResource(R.drawable.no_image),
+        error = painterResource(R.drawable.no_image)
+    )
 }

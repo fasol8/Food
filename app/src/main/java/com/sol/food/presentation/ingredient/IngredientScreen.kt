@@ -32,9 +32,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.sol.food.R
 import com.sol.food.domain.model.ingredient.Nutrient
 import com.sol.food.domain.model.ingredient.Property
 import com.sol.food.utils.ExpandableCard
@@ -67,7 +69,9 @@ fun IngredientScreen(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(370.dp)
+                        .height(370.dp),
+                    placeholder = painterResource(R.drawable.no_image),
+                    error = painterResource(R.drawable.no_image)
                 )
                 IconButton(
                     onClick = { /*TODO: save recipe*/ },
