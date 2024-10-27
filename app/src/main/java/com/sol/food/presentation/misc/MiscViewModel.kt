@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sol.food.data.repository.MiscRepository
+import com.sol.food.domain.model.misc.AnalysisImageResponse
 import com.sol.food.domain.model.misc.ClassifyImageResponse
 import com.sol.food.domain.model.misc.MiscResponse
 import com.sol.food.domain.model.misc.MiscType
@@ -21,6 +22,9 @@ class MiscViewModel @Inject constructor(private val repository: MiscRepository) 
 
     private val _classifyImage = MutableLiveData<ClassifyImageResponse>()
     val classifyImage: LiveData<ClassifyImageResponse> = _classifyImage
+
+    private val _analysisImage = MutableLiveData<AnalysisImageResponse>()
+    val analysisImage: LiveData<AnalysisImageResponse> = _analysisImage
 
     fun getRandomMisc(miscType: MiscType) {
         when (miscType) {
@@ -56,6 +60,17 @@ class MiscViewModel @Inject constructor(private val repository: MiscRepository) 
             try {
                 val response = repository.getClassifyImage(imageURl)
                 _classifyImage.value = response
+            } catch (e: Exception) {
+                Log.i("Error", e.message.toString())
+            }
+        }
+    }
+
+    fun getAnalysisImage(imageURl: String) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getAnalysisImage(imageURl)
+                _analysisImage.value = response
             } catch (e: Exception) {
                 Log.i("Error", e.message.toString())
             }

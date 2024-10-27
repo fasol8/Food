@@ -22,4 +22,5 @@ sealed class FoodScreen(val route: String, val label: String, val icon: Int = 0)
     data object WinePairScreen : FoodScreen("winePairScreen", "Wine Pair Screen")
     data object MiscScreen : FoodScreen("miscScreen", "Misc Screen")
     data object MiscClassifyImage : FoodScreen("miscClassifyImage", "Misc Classify Image")
+    data object MiscAnalysisImage : FoodScreen("miscAnalysisImage", "Misc Analysis Image")
 }

@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.sol.food.domain.model.misc.UrlFoodImages
-import kotlin.math.roundToInt
 
 @Composable
 fun MiscClassifyImg(miscViewModel: MiscViewModel = hiltViewModel()) {
@@ -97,7 +96,7 @@ fun MiscClassifyImg(miscViewModel: MiscViewModel = hiltViewModel()) {
         LazyRow {
             items(UrlFoodImages.entries.size) { index ->
                 val image = UrlFoodImages.entries[index].url
-                ImageFoodItem(image, miscViewModel)
+                ImgClassifyItem(image, miscViewModel)
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
@@ -145,7 +144,7 @@ fun MiscClassifyImg(miscViewModel: MiscViewModel = hiltViewModel()) {
 
 
 @Composable
-fun ImageFoodItem(image: String, miscViewModel: MiscViewModel) {
+fun ImgClassifyItem(image: String, miscViewModel: MiscViewModel) {
     AsyncImage(
         model = image,
         contentDescription = "image",

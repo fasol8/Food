@@ -13,6 +13,7 @@ import com.sol.food.presentation.ingredient.IngredientScreen
 import com.sol.food.presentation.ingredient.IngredientSearch
 import com.sol.food.presentation.mealPlan.MealPlanScreen
 import com.sol.food.presentation.menu.MenuScreen
+import com.sol.food.presentation.misc.MiscAnalysisImg
 import com.sol.food.presentation.misc.MiscClassifyImg
 import com.sol.food.presentation.misc.MiscScreen
 import com.sol.food.presentation.product.ProductScreen
@@ -88,5 +89,6 @@ fun FoodNavHost(navController: NavHostController) {
             MiscScreen(type)
         }
         composable(FoodScreen.MiscClassifyImage.route) { MiscClassifyImg() }
+        composable(FoodScreen.MiscAnalysisImage.route) { MiscAnalysisImg() }
     }
 }

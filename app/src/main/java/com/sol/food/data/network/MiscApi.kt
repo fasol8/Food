@@ -1,6 +1,7 @@
 package com.sol.food.data.network
 
 import com.sol.food.BuildConfig
+import com.sol.food.domain.model.misc.AnalysisImageResponse
 import com.sol.food.domain.model.misc.ClassifyImageResponse
 import com.sol.food.domain.model.misc.MiscResponse
 import retrofit2.http.GET
@@ -23,4 +24,10 @@ interface MiscApi {
         @Query("imageUrl") imageUrl: String,
         @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
     ): ClassifyImageResponse
+
+    @GET("food/images/analyze")
+    suspend fun getAnalysisImage(
+        @Query("imageUrl") imageUrl: String,
+        @Query("apiKey") apiKey: String = BuildConfig.API_KEY,
+    ): AnalysisImageResponse
 }
