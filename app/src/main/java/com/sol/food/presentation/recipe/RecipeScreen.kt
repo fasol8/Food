@@ -1,5 +1,7 @@
 package com.sol.food.presentation.recipe
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -42,25 +44,36 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.text.HtmlCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.sol.food.R
 import com.sol.food.domain.model.recipe.ExtendedIngredient
 import com.sol.food.domain.model.recipe.NutrientGorB
+import com.sol.food.domain.model.recipe.RecipeAttribute
 import com.sol.food.domain.model.recipe.SimilarResponseItem
 import com.sol.food.domain.model.recipe.Step
+import com.sol.food.navigation.FoodScreen
 import com.sol.food.utils.ExpandableCard
 import kotlin.math.roundToInt
 
 @Composable
-fun RecipeScreen(idRecipe: Int, recipeViewModel: RecipeViewModel = hiltViewModel()) {
+fun RecipeScreen(
+    idRecipe: Int,
+    navController: NavController,
+    recipeViewModel: RecipeViewModel = hiltViewModel()
+) {
     val recipe by recipeViewModel.informationRecipe.observeAsState()
     val recipeSimilar by recipeViewModel.similarRecipe.observeAsState(emptyList())
     val recipeNutrient by recipeViewModel.nutrientRecipe.observeAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(idRecipe) {
         recipeViewModel.getInformationRecipe(idRecipe)
@@ -123,7 +136,11 @@ fun RecipeScreen(idRecipe: Int, recipeViewModel: RecipeViewModel = hiltViewModel
                                 text = "By ${recipe?.sourceName ?: ""}",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = Color.Blue,
-                                modifier = Modifier.clickable { /*TODO: intent url*/ }
+                                modifier = Modifier.clickable {
+                                    val intent =
+                                        Intent(Intent.ACTION_VIEW, Uri.parse(recipe!!.sourceUrl))
+                                    context.startActivity(intent)
+                                }
                             )
                         }
                         Icon(
@@ -134,7 +151,69 @@ fun RecipeScreen(idRecipe: Int, recipeViewModel: RecipeViewModel = hiltViewModel
                         )
                         Text(text = recipe?.spoonacularScore?.roundToInt().toString() ?: "0")
                     }
+                    Row {
+                        val attributes = listOf(
+                            RecipeAttribute(recipe?.cheap == true, R.drawable.cheap, "Cheap"),
+                            RecipeAttribute(
+                                recipe?.dairyFree == true,
+                                R.drawable.dairyfree,
+                                "Dairy Free"
+                            ),
+                            RecipeAttribute(
+                                recipe?.glutenFree == true,
+                                R.drawable.glutenfree,
+                                "Gluten Free"
+                            ),
+                            RecipeAttribute(
+                                recipe?.lowFodmap == true,
+                                R.drawable.lowfodmap,
+                                "Low Fodmap"
+                            ),
+                            RecipeAttribute(
+                                recipe?.sustainable == true,
+                                R.drawable.sustainable,
+                                "Sustainable"
+                            ),
+                            RecipeAttribute(recipe?.vegan == true, R.drawable.vegan, "Vegan"),
+                            RecipeAttribute(
+                                recipe?.vegetarian == true,
+                                R.drawable.vegetarian,
+                                "Vegetarian"
+                            ),
+                            RecipeAttribute(
+                                recipe?.veryHealthy == true,
+                                R.drawable.veryhealthy,
+                                "Very Healthy"
+                            ),
+                            RecipeAttribute(
+                                recipe?.veryPopular == true,
+                                R.drawable.verypopular,
+                                "Very Popular"
+                            )
+                        )
 
+                        attributes.filter { it.isEnabled }.forEach { attribute ->
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = attribute.iconRes),
+                                    contentDescription = attribute.label,
+                                    modifier = Modifier
+                                        .height(40.dp)
+                                        .width(40.dp)
+                                        .padding(4.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = attribute.label,
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Light
+                                )
+                            }
+                        }
+                    }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             imageVector = Icons.Default.ShoppingCart,
@@ -205,9 +284,13 @@ fun RecipeScreen(idRecipe: Int, recipeViewModel: RecipeViewModel = hiltViewModel
                                 }
                             }
                             Text(
-                                text = "Read the detailed instructions on ${recipe!!.sourceName}",
+                                text = "Read the detailed instructions on ${recipe?.sourceName ?: "??"}",
                                 color = Color.Blue,
-                                modifier = Modifier.clickable { /*TODO:intent url*/ })
+                                modifier = Modifier.clickable {
+                                    val intent =
+                                        Intent(Intent.ACTION_VIEW, Uri.parse(recipe!!.sourceUrl))
+                                    context.startActivity(intent)
+                                })
                         }
                     } else {
                         Text(text = "No instructions")
@@ -219,7 +302,6 @@ fun RecipeScreen(idRecipe: Int, recipeViewModel: RecipeViewModel = hiltViewModel
                             Row {
                                 Text(
                                     text = "${recipeNutrient!!.calories} Calories",
-//                                style = MaterialTheme.typography.bodyMedium,
                                     modifier = Modifier
                                         .padding(4.dp)
                                         .border(1.dp, Color.White)
@@ -227,7 +309,6 @@ fun RecipeScreen(idRecipe: Int, recipeViewModel: RecipeViewModel = hiltViewModel
                                 )
                                 Text(
                                     text = "${recipeNutrient!!.protein} Protein",
-//                                style = MaterialTheme.typography.bodyMedium,
                                     modifier = Modifier
                                         .padding(4.dp)
                                         .border(1.dp, Color.White)
@@ -235,7 +316,6 @@ fun RecipeScreen(idRecipe: Int, recipeViewModel: RecipeViewModel = hiltViewModel
                                 )
                                 Text(
                                     text = "${recipeNutrient!!.fat} Fat",
-//                                style = MaterialTheme.typography.bodyMedium,
                                     modifier = Modifier
                                         .padding(4.dp)
                                         .border(1.dp, Color.White)
@@ -243,7 +323,6 @@ fun RecipeScreen(idRecipe: Int, recipeViewModel: RecipeViewModel = hiltViewModel
                                 )
                                 Text(
                                     text = "${recipeNutrient!!.carbs} Carbs",
-//                                style = MaterialTheme.typography.bodyMedium,
                                     modifier = Modifier
                                         .padding(4.dp)
                                         .border(1.dp, Color.White)
@@ -276,8 +355,10 @@ fun RecipeScreen(idRecipe: Int, recipeViewModel: RecipeViewModel = hiltViewModel
                 )
                 LazyRow {
                     items(recipeSimilar.size) { index ->
-                        val recipe = recipeSimilar[index]
-                        RecipeSimilarItem(recipe) {/*TODO: intent to recipe Detail*/ }
+                        val recipeS = recipeSimilar[index]
+                        RecipeSimilarItem(recipeS) {
+                            navController.navigate(FoodScreen.RecipeScreen.route + "/${recipeS.id}")
+                        }
                     }
                 }
             }

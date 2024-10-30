@@ -41,9 +41,9 @@ fun FoodNavHost(navController: NavHostController) {
             arguments = listOf(navArgument("idRecipe") { type = NavType.IntType })
         ) { navBackStackEntry ->
             val id = navBackStackEntry.arguments?.getInt("idRecipe") ?: return@composable
-            RecipeScreen(id)
+            RecipeScreen(id, navController)
         }
-        composable(FoodScreen.RecipeRandom.route) { RecipeRandom() }
+        composable(FoodScreen.RecipeRandom.route) { RecipeRandom(navController) }
 
         composable(FoodScreen.IngredientSearch.route) { IngredientSearch(navController) }
         composable(

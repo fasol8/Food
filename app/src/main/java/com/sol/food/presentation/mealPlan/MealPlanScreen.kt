@@ -52,6 +52,7 @@ import com.sol.food.domain.model.mealPlan.DayMealData
 import com.sol.food.domain.model.mealPlan.Meal
 import com.sol.food.domain.model.mealPlan.Nutrients
 import com.sol.food.domain.model.mealPlan.Week
+import com.sol.food.navigation.FoodScreen
 import com.sol.food.utils.ExpandableCard
 
 @Composable
@@ -171,8 +172,7 @@ fun MealDayTab(mealGenerate: List<Meal>, navController: NavController) {
         items(mealGenerate.size) { index ->
             val meal = mealGenerate[index]
             MealItem(meal = meal) {
-//                        navController.navigate(FoodScreen.RecipeScreen.route+"${meal.id}")
-                TODO("implements id in Recipe Screen")
+                        navController.navigate(FoodScreen.RecipeScreen.route+"${meal.id}")
             }
         }
     }
@@ -211,8 +211,7 @@ fun MealWeekTab(mealGenerateWeek: Week, navController: NavController) {
                     items(dayData.meals.size) { index ->
                         val meal = dayData.meals[index]
                         MealItem(meal = meal) {
-                            // navController.navigate(FoodScreen.RecipeScreen.route+"${meal.id}")
-                            TODO("implement id in Recipe Screen")
+                             navController.navigate(FoodScreen.RecipeScreen.route+"${meal.id}")
                         }
                     }
                 }

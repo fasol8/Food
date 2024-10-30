@@ -1,5 +1,7 @@
 package com.sol.food.presentation.wine
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,6 +42,7 @@ import kotlin.math.roundToInt
 @Composable
 fun WineScreen(wine: String, wineViewModel: WineViewModel = hiltViewModel()) {
     val wines by wineViewModel.recommendationWine.observeAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(wine) {
         wineViewModel.getRecommendationWine(wine.replace(" ", "_"))
@@ -63,6 +67,8 @@ fun WineScreen(wine: String, wineViewModel: WineViewModel = hiltViewModel()) {
 
 @Composable
 fun WineItem(wine: RecommendedWine) {
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -96,7 +102,10 @@ fun WineItem(wine: RecommendedWine) {
                         text = "info",
                         color = Color.Blue,
                         style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.clickable { /*TODO: intent url*/ })
+                        modifier = Modifier.clickable {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(wine.link))
+                            context.startActivity(intent)
+                        })
                     Spacer(modifier = Modifier.width(16.dp))
                     Icon(
                         imageVector = Icons.Default.Star,

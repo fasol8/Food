@@ -1,5 +1,7 @@
 package com.sol.food.presentation.recipe
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -37,22 +39,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.sol.food.R
+import com.sol.food.navigation.FoodScreen
 import com.sol.food.utils.ExpandableCard
 import kotlin.math.roundToInt
 
 @Composable
-fun RecipeRandom(recipeViewModel: RecipeViewModel = hiltViewModel()) {
+fun RecipeRandom(navController: NavController, recipeViewModel: RecipeViewModel = hiltViewModel()) {
     val recipeRandom by recipeViewModel.randomRecipe.observeAsState()
     val recipeSimilar by recipeViewModel.similarRecipe.observeAsState(emptyList())
     val recipeNutrient by recipeViewModel.nutrientRecipe.observeAsState()
+    val context = LocalContext.current
 
-    LaunchedEffect (true){
+    LaunchedEffect(true) {
         recipeViewModel.getRandomRecipe()
     }
 
@@ -113,7 +119,13 @@ fun RecipeRandom(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                                 text = "By ${recipeRandom?.sourceName ?: ""}",
                                 style = MaterialTheme.typography.labelSmall,
                                 color = Color.Blue,
-                                modifier = Modifier.clickable { /*TODO: intent url*/ }
+                                modifier = Modifier.clickable {
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse(recipeRandom?.sourceUrl)
+                                    )
+                                    context.startActivity(intent)
+                                }
                             )
                         }
                         Icon(
@@ -197,7 +209,13 @@ fun RecipeRandom(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                             Text(
                                 text = "Read the detailed instructions on ${recipeRandom!!.sourceName}",
                                 color = Color.Blue,
-                                modifier = Modifier.clickable { /*TODO:intent url*/ })
+                                modifier = Modifier.clickable {
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse(recipeRandom?.sourceUrl)
+                                    )
+                                    context.startActivity(intent)
+                                })
                         }
                     } else {
                         Text(text = "No instructions")
@@ -267,7 +285,9 @@ fun RecipeRandom(recipeViewModel: RecipeViewModel = hiltViewModel()) {
                 LazyRow {
                     items(recipeSimilar.size) { index ->
                         val recipe = recipeSimilar[index]
-                        RecipeSimilarItem(recipe) {/*TODO: intent to recipe Detail*/ }
+                        RecipeSimilarItem(recipe) {
+                            navController.navigate(FoodScreen.RecipeScreen.route + "/${recipe.id}")
+                        }
                     }
                 }
             }
