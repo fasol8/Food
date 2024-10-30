@@ -28,6 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,8 +57,16 @@ fun IngredientScreen(
     val infoIngredient by ingredientViewModel.informationIngredient.observeAsState()
     val image = "https://spoonacular.com/cdn/ingredients_250x250/" + infoIngredient?.image
     val possibleUnits = infoIngredient?.possibleUnits
+    var isSaved by remember { mutableStateOf(false) }
 
     if (infoIngredient != null) {
+
+        LaunchedEffect(infoIngredient) {
+            ingredientViewModel.isIngredientSaved(infoIngredient!!) { saved ->
+                isSaved = saved
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -74,15 +85,23 @@ fun IngredientScreen(
                     error = painterResource(R.drawable.no_image)
                 )
                 IconButton(
-                    onClick = { /*TODO: save recipe*/ },
+                    onClick = {
+                        if (isSaved) {
+                            ingredientViewModel.deleteItemById(infoIngredient!!.id)
+                            isSaved = false
+                        } else {
+                            ingredientViewModel.saveItem(infoIngredient!!)
+                            isSaved = true
+                        }
+                    },
                     modifier = Modifier
                         .padding(16.dp)
                         .align(Alignment.TopEnd)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Save Recipe",
-                        tint = Color.White
+                        painter = painterResource(if (isSaved) R.drawable.ic_bookmark_fill else R.drawable.ic_bookmark_border),
+                        contentDescription = "Save Ingredient",
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }

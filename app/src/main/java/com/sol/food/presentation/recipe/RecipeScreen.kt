@@ -38,6 +38,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -74,14 +77,19 @@ fun RecipeScreen(
     val recipeSimilar by recipeViewModel.similarRecipe.observeAsState(emptyList())
     val recipeNutrient by recipeViewModel.nutrientRecipe.observeAsState()
     val context = LocalContext.current
+    var isSaved by remember { mutableStateOf(false) }
 
     LaunchedEffect(idRecipe) {
         recipeViewModel.getInformationRecipe(idRecipe)
     }
 
     LaunchedEffect(recipe) {
-        if (recipe != null)
+        if (recipe != null) {
             recipeViewModel.loadData(recipe!!.id)
+            recipeViewModel.isRecipeSaved(recipe!!) { saved ->
+                isSaved = saved
+            }
+        }
     }
 
     Column(
@@ -102,13 +110,21 @@ fun RecipeScreen(
                 error = painterResource(R.drawable.no_image)
             )
             IconButton(
-                onClick = { /*TODO: save recipe*/ },
+                onClick = {
+                    if (isSaved) {
+                        recipeViewModel.deleteItemById(recipe!!.id)
+                        isSaved = false
+                    } else {
+                        recipeViewModel.saveItem(recipe!!)
+                        isSaved = true
+                    }
+                },
                 modifier = Modifier
                     .padding(16.dp)
                     .align(Alignment.TopEnd)
             ) {
                 Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
+                    painter = painterResource(if (isSaved) R.drawable.ic_bookmark_fill else R.drawable.ic_bookmark_border),
                     contentDescription = "Save Recipe",
                     tint = Color.White
                 )

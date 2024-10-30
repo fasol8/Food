@@ -42,7 +42,6 @@ import kotlin.math.roundToInt
 @Composable
 fun WineScreen(wine: String, wineViewModel: WineViewModel = hiltViewModel()) {
     val wines by wineViewModel.recommendationWine.observeAsState()
-    val context = LocalContext.current
 
     LaunchedEffect(wine) {
         wineViewModel.getRecommendationWine(wine.replace(" ", "_"))

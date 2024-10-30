@@ -5,11 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sol.food.data.local.ItemEntity
 import com.sol.food.data.repository.IngredientRepository
 import com.sol.food.domain.model.ingredient.IngredientResponse
 import com.sol.food.domain.model.ingredient.ResultSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,11 +25,7 @@ class IngredientViewModel @Inject constructor(private val repository: Ingredient
     private val _searchIngredient = MutableLiveData<List<ResultSearch>>()
     val searchIngredient: LiveData<List<ResultSearch>> = _searchIngredient
 
-    init {
-        getInformationIngredient()
-    }
-
-    fun getInformationIngredient(idIngredient: Int = 9266) {
+    fun getInformationIngredient(idIngredient: Int) {
         viewModelScope.launch {
             try {
                 val response = repository.getInformationIngredient(idIngredient)
@@ -47,4 +46,32 @@ class IngredientViewModel @Inject constructor(private val repository: Ingredient
             }
         }
     }
+
+    fun saveItem(ingredient: IngredientResponse) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val newIngredient = ItemEntity(
+                id = ingredient.id ?: 0,
+                name = ingredient.name ?: "",
+                image = ingredient.image ?: "",
+                type = "Ingredient"
+            )
+            repository.saveIngredient(newIngredient)
+        }
+    }
+
+    fun isIngredientSaved(ingredient: IngredientResponse, callback: (Boolean) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val isSaved = repository.isItemSaved(ingredient.id)
+            withContext(Dispatchers.Main) {
+                callback(isSaved)
+            }
+        }
+    }
+
+    fun deleteItemById(itemId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteItemById(itemId)
+        }
+    }
+
 }

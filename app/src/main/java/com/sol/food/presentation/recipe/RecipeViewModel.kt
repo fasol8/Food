@@ -5,14 +5,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sol.food.data.local.ItemEntity
 import com.sol.food.data.repository.RecipeRepository
+import com.sol.food.domain.model.ingredient.IngredientResponse
 import com.sol.food.domain.model.recipe.NutrientResponse
 import com.sol.food.domain.model.recipe.RecipeRandomInfo
 import com.sol.food.domain.model.recipe.RecipeInformation
 import com.sol.food.domain.model.recipe.ResultSearch
 import com.sol.food.domain.model.recipe.SimilarResponseItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -91,6 +95,33 @@ class RecipeViewModel @Inject constructor(private val repository: RecipeReposito
             } catch (e: Exception) {
                 Log.i("Error", e.message.toString())
             }
+        }
+    }
+
+    fun saveItem(recipe: RecipeInformation) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val newRecipe = ItemEntity(
+                id = recipe.id ?: 0,
+                name = recipe.title ?: "",
+                image = recipe.image ?: "",
+                type = "Recipe"
+            )
+            repository.saveRecipe(newRecipe)
+        }
+    }
+
+    fun isRecipeSaved(recipe: RecipeInformation, callback: (Boolean) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val isSaved = repository.isItemSaved(recipe.id)
+            withContext(Dispatchers.Main) {
+                callback(isSaved)
+            }
+        }
+    }
+
+    fun deleteItemById(itemId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteItemById(itemId)
         }
     }
 }

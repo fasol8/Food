@@ -31,6 +31,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,14 +51,24 @@ import com.sol.food.utils.ExpandableCard
 @Composable
 fun ProductScreen(idProduct: Int, productViewModel: ProductViewModel = hiltViewModel()) {
     val infoProduct by productViewModel.informationProduct.observeAsState()
+    var isSaved by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(idProduct) {
         productViewModel.getInformationProduct(idProduct)
     }
 
     if (infoProduct != null) {
+
+        LaunchedEffect(infoProduct) {
+            productViewModel.isProductSaved(infoProduct!!) { saved ->
+                isSaved = saved
+            }
+        }
+
         val image = "https://img.spoonacular.com/products/${infoProduct?.id}-312x231.jpg"
         val importantBadges = infoProduct?.importantBadges
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -74,14 +87,22 @@ fun ProductScreen(idProduct: Int, productViewModel: ProductViewModel = hiltViewM
                     error = painterResource(R.drawable.no_image)
                 )
                 IconButton(
-                    onClick = { /*TODO: save recipe*/ },
+                    onClick = {
+                        if (isSaved) {
+                            productViewModel.deleteItemById(infoProduct!!.id)
+                            isSaved = false
+                        } else {
+                            productViewModel.saveItem(infoProduct!!)
+                            isSaved = true
+                        }
+                    },
                     modifier = Modifier
                         .padding(16.dp)
                         .align(Alignment.TopEnd)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Save Recipe",
+                        painter = painterResource(if (isSaved) R.drawable.ic_bookmark_fill else R.drawable.ic_bookmark_border),
+                        contentDescription = "Save Product",
                         tint = Color.White
                     )
                 }
