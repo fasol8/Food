@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.sol.food.domain.model.misc.MiscType
 import com.sol.food.presentation.bookmark.BookMarkScreen
 import com.sol.food.presentation.home.HomeScreen
+import com.sol.food.presentation.home.SplashScreen
 import com.sol.food.presentation.ingredient.IngredientScreen
 import com.sol.food.presentation.ingredient.IngredientSearch
 import com.sol.food.presentation.mealPlan.MealPlanScreen
@@ -28,7 +29,8 @@ import com.sol.food.presentation.wine.WineScreen
 
 @Composable
 fun FoodNavHost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = FoodScreen.HomeScreen.route) {
+    NavHost(navController = navController, startDestination = FoodScreen.SplashScreen.route) {
+        composable(FoodScreen.SplashScreen.route) { SplashScreen(navController) }
         composable(FoodScreen.HomeScreen.route) { HomeScreen(navController) }
         composable(FoodScreen.MealPlanScreen.route) { MealPlanScreen(navController) }
         composable(FoodScreen.BookmarkScreen.route) { BookMarkScreen(navController) }
