@@ -24,6 +24,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.sol.food.domain.model.mealPlan.DayMealData
+import com.sol.food.ui.theme.darkOliveGreen
+import com.sol.food.ui.theme.lightOliveGreen
+import com.sol.food.ui.theme.mossGreen
+import com.sol.food.ui.theme.oliveDrab
+import com.sol.food.ui.theme.paleOliveGreen
+import com.sol.food.ui.theme.sage
+import com.sol.food.ui.theme.yellowGreen
 
 @Composable
 fun ExpandableCard(title: String, content: @Composable () -> Unit) {
@@ -68,9 +76,18 @@ fun ExpandableCard(title: String, content: @Composable () -> Unit) {
 
 fun colorCardType(title: String): Color {
     return when (title) {
-        "Ingredients" -> Color.Green
-        "Instructions" -> Color.Magenta
-        "Nutrients"->Color.Blue
-        else -> Color.Cyan
+        "Monday" -> darkOliveGreen
+        "Tuesday" -> oliveDrab
+        "Wednesday" -> sage
+        "Thursday" -> yellowGreen
+        "Friday" -> mossGreen
+        "Saturday" -> lightOliveGreen
+        "Sunday" -> paleOliveGreen
+        "Ingredients" -> oliveDrab
+        "Instructions" -> yellowGreen
+        "Nutritional Information" -> lightOliveGreen
+        "Nutrients" -> lightOliveGreen
+        "Properties" -> paleOliveGreen
+        else -> darkOliveGreen
     }
 }

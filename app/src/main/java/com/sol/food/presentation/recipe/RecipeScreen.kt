@@ -109,26 +109,6 @@ fun RecipeScreen(
                 placeholder = painterResource(R.drawable.no_image),
                 error = painterResource(R.drawable.no_image)
             )
-            IconButton(
-                onClick = {
-                    if (isSaved) {
-                        recipeViewModel.deleteItemById(recipe!!.id)
-                        isSaved = false
-                    } else {
-                        recipeViewModel.saveItem(recipe!!)
-                        isSaved = true
-                    }
-                },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.TopEnd)
-            ) {
-                Icon(
-                    painter = painterResource(if (isSaved) R.drawable.ic_bookmark_fill else R.drawable.ic_bookmark_border),
-                    contentDescription = "Save Recipe",
-                    tint = Color.White
-                )
-            }
         }
         Card(
             modifier = Modifier
@@ -166,6 +146,27 @@ fun RecipeScreen(
                             modifier = Modifier.size(20.dp)
                         )
                         Text(text = recipe?.spoonacularScore?.roundToInt().toString() ?: "0")
+                        Spacer(modifier = Modifier.width(2.dp))
+                        IconButton(
+                            onClick = {
+                                if (isSaved) {
+                                    recipeViewModel.deleteItemById(recipe!!.id)
+                                    isSaved = false
+                                } else {
+                                    recipeViewModel.saveItem(recipe!!)
+                                    isSaved = true
+                                }
+                            },
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .align(Alignment.CenterVertically)
+                        ) {
+                            Icon(
+                                painter = painterResource(if (isSaved) R.drawable.ic_bookmark_fill else R.drawable.ic_bookmark_border),
+                                contentDescription = "Save Recipe",
+                                tint = Color.White
+                            )
+                        }
                     }
                     Row {
                         val attributes = listOf(

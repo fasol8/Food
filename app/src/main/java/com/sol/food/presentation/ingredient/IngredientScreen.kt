@@ -1,6 +1,7 @@
 package com.sol.food.presentation.ingredient
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -84,26 +85,6 @@ fun IngredientScreen(
                     placeholder = painterResource(R.drawable.no_image),
                     error = painterResource(R.drawable.no_image)
                 )
-                IconButton(
-                    onClick = {
-                        if (isSaved) {
-                            ingredientViewModel.deleteItemById(infoIngredient!!.id)
-                            isSaved = false
-                        } else {
-                            ingredientViewModel.saveItem(infoIngredient!!)
-                            isSaved = true
-                        }
-                    },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.TopEnd)
-                ) {
-                    Icon(
-                        painter = painterResource(if (isSaved) R.drawable.ic_bookmark_fill else R.drawable.ic_bookmark_border),
-                        contentDescription = "Save Ingredient",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
             }
             Card(
                 modifier = Modifier
@@ -118,14 +99,40 @@ fun IngredientScreen(
                             text = infoIngredient?.name ?: "",
                             style = MaterialTheme.typography.titleLarge
                         )
-                        Text(
-                            text = infoIngredient?.originalName ?: "",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color.Gray,
-                        )
-                        Text(
-                            text = "consistency: ${infoIngredient?.consistency ?: "??"}",
-                        )
+                        Row(
+                            verticalAlignment = Alignment.Bottom,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = infoIngredient?.originalName ?: "",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Color.Gray,
+                                )
+                                Text(
+                                    text = "consistency: ${infoIngredient?.consistency ?: "??"}",
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    if (isSaved) {
+                                        ingredientViewModel.deleteItemById(infoIngredient!!.id)
+                                        isSaved = false
+                                    } else {
+                                        ingredientViewModel.saveItem(infoIngredient!!)
+                                        isSaved = true
+                                    }
+                                },
+                                modifier = Modifier
+                                    .padding(16.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(if (isSaved) R.drawable.ic_bookmark_fill else R.drawable.ic_bookmark_border),
+                                    contentDescription = "Save Ingredient",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
                         if (possibleUnits != null && possibleUnits.isNotEmpty()) {
                             Text(
                                 text = "possibleUnits: ${possibleUnits.joinToString(", ")}",

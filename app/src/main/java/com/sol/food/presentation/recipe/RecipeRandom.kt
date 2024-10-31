@@ -35,6 +35,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,14 +60,19 @@ fun RecipeRandom(navController: NavController, recipeViewModel: RecipeViewModel 
     val recipeSimilar by recipeViewModel.similarRecipe.observeAsState(emptyList())
     val recipeNutrient by recipeViewModel.nutrientRecipe.observeAsState()
     val context = LocalContext.current
+    var isSaved by remember { mutableStateOf(false) }
 
     LaunchedEffect(true) {
         recipeViewModel.getRandomRecipe()
     }
 
     LaunchedEffect(recipeRandom) {
-        if (recipeRandom != null)
+        if (recipeRandom != null) {
             recipeViewModel.loadData(recipeRandom!!.id)
+            recipeViewModel.isRecipeSavedRandom(recipeRandom!!) { saved ->
+                isSaved = saved
+            }
+        }
     }
 
     Column(
@@ -84,18 +92,6 @@ fun RecipeRandom(navController: NavController, recipeViewModel: RecipeViewModel 
                 placeholder = painterResource(R.drawable.no_image),
                 error = painterResource(R.drawable.no_image)
             )
-            IconButton(
-                onClick = { /*TODO: save recipe*/ },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.TopEnd)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = "Save Recipe",
-                    tint = Color.White
-                )
-            }
         }
         Card(
             modifier = Modifier
@@ -138,40 +134,62 @@ fun RecipeRandom(navController: NavController, recipeViewModel: RecipeViewModel 
                     }
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.ShoppingCart,
-                            contentDescription = "Price Serving",
-                            tint = Color.Gray,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            text = "$${recipeRandom?.pricePerServing ?: "0"}",
-                            color = Color.Gray
-                        )
-                        Spacer(modifier = Modifier.width(16.dp))
+                        Row(modifier = Modifier.weight(1f)) {
+                            Icon(
+                                imageVector = Icons.Default.ShoppingCart,
+                                contentDescription = "Price Serving",
+                                tint = Color.Gray,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = "$${recipeRandom?.pricePerServing ?: "0"}",
+                                color = Color.Gray
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
 
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_time),
-                            contentDescription = "Ready time",
-                            tint = Color.Gray,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            text = "${recipeRandom?.readyInMinutes ?: "??"} min",
-                            color = Color.Gray
-                        )
-                        Spacer(modifier = Modifier.width(16.dp))
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_time),
+                                contentDescription = "Ready time",
+                                tint = Color.Gray,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = "${recipeRandom?.readyInMinutes ?: "??"} min",
+                                color = Color.Gray
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
 
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_service),
-                            contentDescription = "Serving",
-                            tint = Color.Gray,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            text = "${recipeRandom?.servings ?: "??"} service",
-                            color = Color.Gray
-                        )
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_service),
+                                contentDescription = "Serving",
+                                tint = Color.Gray,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = "${recipeRandom?.servings ?: "??"} service",
+                                color = Color.Gray
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                if (isSaved) {
+                                    recipeViewModel.deleteItemById(recipeRandom!!.id)
+                                    isSaved = false
+                                } else {
+                                    recipeViewModel.saveItemRandom(recipeRandom!!)
+                                    isSaved = true
+                                }
+                            },
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .align(Alignment.CenterVertically)
+                        ) {
+                            Icon(
+                                painter = painterResource(if (isSaved) R.drawable.ic_bookmark_fill else R.drawable.ic_bookmark_border),
+                                contentDescription = "Save Recipe",
+                                tint = Color.White
+                            )
+                        }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(text = " Description", style = MaterialTheme.typography.titleSmall)

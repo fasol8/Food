@@ -86,26 +86,6 @@ fun ProductScreen(idProduct: Int, productViewModel: ProductViewModel = hiltViewM
                     placeholder = painterResource(R.drawable.no_image),
                     error = painterResource(R.drawable.no_image)
                 )
-                IconButton(
-                    onClick = {
-                        if (isSaved) {
-                            productViewModel.deleteItemById(infoProduct!!.id)
-                            isSaved = false
-                        } else {
-                            productViewModel.saveItem(infoProduct!!)
-                            isSaved = true
-                        }
-                    },
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.TopEnd)
-                ) {
-                    Icon(
-                        painter = painterResource(if (isSaved) R.drawable.ic_bookmark_fill else R.drawable.ic_bookmark_border),
-                        contentDescription = "Save Product",
-                        tint = Color.White
-                    )
-                }
             }
             Card(
                 modifier = Modifier
@@ -126,27 +106,49 @@ fun ProductScreen(idProduct: Int, productViewModel: ProductViewModel = hiltViewM
                             color = Color.Gray,
                         )
                         Row {
-                            Icon(
-                                Icons.Default.ShoppingCart,
-                                contentDescription = "Ready in ...",
-                                tint = Color.Gray,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Text(
-                                text = "$${infoProduct?.price ?: "??"}",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_service),
-                                contentDescription = "Serving",
-                                tint = Color.Gray,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Text(
-                                text = "${infoProduct?.servings?.number ?: "??"} ${infoProduct?.servings?.raw ?: ""}",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                            Row(modifier = Modifier.weight(1f)) {
+                                Icon(
+                                    Icons.Default.ShoppingCart,
+                                    contentDescription = "Ready in ...",
+                                    tint = Color.Gray,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Text(
+                                    text = "$${infoProduct?.price ?: "??"}",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_service),
+                                    contentDescription = "Serving",
+                                    tint = Color.Gray,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Text(
+                                    text = "${infoProduct?.servings?.number ?: "??"} ${infoProduct?.servings?.raw ?: ""}",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    if (isSaved) {
+                                        productViewModel.deleteItemById(infoProduct!!.id)
+                                        isSaved = false
+                                    } else {
+                                        productViewModel.saveItem(infoProduct!!)
+                                        isSaved = true
+                                    }
+                                },
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .align(Alignment.Bottom)
+                            ) {
+                                Icon(
+                                    painter = painterResource(if (isSaved) R.drawable.ic_bookmark_fill else R.drawable.ic_bookmark_border),
+                                    contentDescription = "Save Product",
+                                    tint = Color.White
+                                )
+                            }
                         }
                         if (importantBadges != null && importantBadges.isNotEmpty()) {
                             Text(
