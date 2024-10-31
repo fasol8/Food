@@ -53,7 +53,7 @@ class ProductViewModel @Inject constructor(private val repository: ProductReposi
             val newProduct = ItemEntity(
                 id = product.id ?: 0,
                 name = product.title ?: "",
-                image = product.id.toString()?: "",
+                image = "https://img.spoonacular.com/products/${product.id ?: ""}-312x231.jpg",
                 type = "Product"
             )
             repository.saveProduct(newProduct)

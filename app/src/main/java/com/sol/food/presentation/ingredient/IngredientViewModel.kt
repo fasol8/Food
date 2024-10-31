@@ -52,7 +52,7 @@ class IngredientViewModel @Inject constructor(private val repository: Ingredient
             val newIngredient = ItemEntity(
                 id = ingredient.id ?: 0,
                 name = ingredient.name ?: "",
-                image = ingredient.image ?: "",
+                image = "https://spoonacular.com/cdn/ingredients_250x250/${ingredient.image ?: ""}",
                 type = "Ingredient"
             )
             repository.saveIngredient(newIngredient)

@@ -31,7 +31,7 @@ fun FoodNavHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = FoodScreen.HomeScreen.route) {
         composable(FoodScreen.HomeScreen.route) { HomeScreen(navController) }
         composable(FoodScreen.MealPlanScreen.route) { MealPlanScreen(navController) }
-        composable(FoodScreen.BookmarkScreen.route) { BookMarkScreen() }
+        composable(FoodScreen.BookmarkScreen.route) { BookMarkScreen(navController) }
         composable(FoodScreen.MenuScreen.route) { MenuScreen(navController) }
 
 
