@@ -283,7 +283,9 @@ fun RecipeScreen(
                         LazyColumn(modifier = Modifier.heightIn(max = 400.dp)) {
                             items(recipe!!.extendedIngredients.size) { index ->
                                 val ingredient = recipe!!.extendedIngredients[index]
-                                IngredientItemRecipe(ingredient)
+                                IngredientItemRecipe(ingredient) {
+                                    navController.navigate(FoodScreen.IngredientScreen.route + "/${ingredient.id}")
+                                }
                             }
                         }
                     } else {
@@ -384,9 +386,11 @@ fun RecipeScreen(
 }
 
 @Composable
-fun IngredientItemRecipe(ingredient: ExtendedIngredient) {
+fun IngredientItemRecipe(ingredient: ExtendedIngredient, onClick: () -> Unit) {
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable { onClick() }) {
             val image =
                 "https://img.spoonacular.com/ingredients_100x100/${ingredient.name}.jpg" ?: ""
             AsyncImage(

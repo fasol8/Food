@@ -207,7 +207,9 @@ fun RecipeRandom(navController: NavController, recipeViewModel: RecipeViewModel 
                         LazyColumn(modifier = Modifier.heightIn(max = 400.dp)) {
                             items(recipeRandom!!.extendedIngredients.size) { index ->
                                 val ingredient = recipeRandom!!.extendedIngredients[index]
-                                IngredientItemRecipe(ingredient)
+                                IngredientItemRecipe(ingredient) {
+                                    navController.navigate(FoodScreen.IngredientScreen.route + "/${ingredient.id}")
+                                }
                             }
                         }
                     } else {

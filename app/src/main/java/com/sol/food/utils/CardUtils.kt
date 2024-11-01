@@ -1,10 +1,15 @@
 package com.sol.food.utils
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -23,8 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import com.sol.food.domain.model.mealPlan.DayMealData
 import com.sol.food.ui.theme.darkOliveGreen
 import com.sol.food.ui.theme.lightOliveGreen
 import com.sol.food.ui.theme.mossGreen
@@ -74,7 +79,48 @@ fun ExpandableCard(title: String, content: @Composable () -> Unit) {
     }
 }
 
-fun colorCardType(title: String): Color {
+@Composable
+fun ExpandableItemCard(
+    title: String,
+    icon: Painter,
+    content: @Composable () -> Unit
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .padding(16.dp),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
+        shape = RoundedCornerShape(8.dp),
+        onClick = { isExpanded = !isExpanded } // Cambia el estado cuando se hace clic en la tarjeta
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            // Ícono y Título
+            Icon(
+                painter = icon,
+                contentDescription = null,
+                modifier = Modifier.size(48.dp),
+                tint = if (isExpanded) MaterialTheme.colorScheme.primary else Color.Gray
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.clickable { isExpanded = !isExpanded }
+            )
+
+            AnimatedVisibility(visible = isExpanded) {
+                content()
+            }
+        }
+    }
+}
+
+private fun colorCardType(title: String): Color {
     return when (title) {
         "Monday" -> darkOliveGreen
         "Tuesday" -> oliveDrab
